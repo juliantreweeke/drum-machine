@@ -144,11 +144,8 @@ background-color: blue;
 #main {
 z-index:3;
 flex: 1 0 auto;
-
 /*display:contents;*/
-position:relative;
-top:48%;
-left:32%;
+/*position:absolute;*/
 
 /*color:white;*/
 }
@@ -254,21 +251,19 @@ top:340px;
 
 
 .tempo {
-left:-80px;
+left:270px;
 top:380px;
-width: 40px;
-font-size: 20px;
 /*background-image: url(../images/sine.png);*/
 }
 
 .tempoup {
-left:-40px;
+left:310px;
 top:380px;
 /*background-image: url(../images/sine.png);*/
 }
 
 .tempodown {
-left:-120px;
+left:230px;
 top:380px;
 /*background-image: url(../images/sine.png);*/
 }
@@ -277,7 +272,7 @@ top:380px;
 
 
 .samplebuttons {
-  left:-120px;
+  left:230px;
   position:absolute;
   background-color: black;
   opacity: 0.8;

@@ -79,7 +79,8 @@ var basskey = [55,110,123,130,146,164,174,195];
 
   // generate each individual sound pad from object constructors
 
-  for (var i = 0, j=350 ; i < 16; i++, j+= 40 ) {
+  for (var i = 0, j=0 ; i < 16; i++, j+= 40 ) {
+    // 350
     // top left index
   // kicks.push(new HtmlSquare('320',j,i,'kick'));
   kicks.push(new HtmlSquare('120',j,i,'kick'));
