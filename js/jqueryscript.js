@@ -1,5 +1,10 @@
 
+
 $(document).ready(function(){
+
+  // $(document).on('click', '.pad', function(){
+  // });
+
 
   var kickcounter = 0;
   console.log(kicksamples.length);
@@ -24,16 +29,28 @@ $(document).ready(function(){
     } // i loop
   }
 
-  var createBox = function (top,left,target) {
-        var $square = $('<td class="boxo"></td>');
-        $row.append(target)
-      } // j loop
-     // i loop
-  
+  // var createBox = function (top,left,target) {
+  //
+  //   var $square = $('<td class="test"></td>');
+  //   $('#kicktable').append($square);
+  //   // $('#kicktable').append($square).css({
+  //   // width: this.size, height: this.size, backgroundColor:'white', display:'absolute',
+  //   // top: this.top, left: this.left
+  //   // });
+  // } // j loop
+  //    // i loop
+
+
+  $('.pad').click(function(){
+    alert('clicked');
+  })
 
 
 
-  createBoard();
+
+
+
+  // createBoard();
 
 
 

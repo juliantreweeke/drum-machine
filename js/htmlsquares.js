@@ -1,64 +1,44 @@
-function HtmlSquare(x, y, i) {
-  this.x = x;
-  this.y = y;
-  this.col = color(0,0, 0);
-  this.id = i;
+
+var $square;
+
+function HtmlSquare(top,left, i) {
+  var self = this;
+
+  this.col = 'rgb(250,250,250)';
+  // this.id = i;
+  this.name = 'kick' + i.toString();
   this.active = false;
-  this.size = 40;
 
   this.display = function() {
-    
-    box(this.x, this.y, this.size, this.size);
+
+    $(document).ready(function(){
+      $square = $('<div class="pad"></div>').css({
+      top: top + 'px', left: left.toString() + 'px'
+      });
+
+      $square.attr('id', self.name);
+      $('#kicktable').append($square);
+      $square.click(function(){ self.clicked() });
+
+    });
   }
 
-  // this.move = function() {
-  //   this.x = this.x + random(-1, 1);
-  //   this.y = this.y + random(-1, 1);
-  //
-  // }
+
   this.clicked = function() {
-    var d = dist(mouseX, mouseY, this.x, this.y + 20);
-    if (d < 20) {
 
+    if (self.active){
+      self.active = false;
+      $('#' + self.name ).css({
+      backgroundColor: 'black'
+      });
 
-      if (this.active){
-        this.active = false;
-        this.col = color(0,0, 0);
-      } else {
-        this.col = color(70,130,180);
-        this.active = true;
-      }
-
+    } else {
+      self.active = true;
+      $('#' + self.name ).css({
+      backgroundColor: 'blue'
+      });
     }
-  }
-
-  // this.coloron = function(){
-  //
-  //   this.col = color(255, 0, 0);
-  // }
-
-  this.coloron = setInterval(myTimer, 1000);
-
-   function myTimer() {
-    this.col = color(255, 0, 0);
-
-     }
-
-
-
-
-
-  this.coloroff = function() {
-    // this.col = color(0,0, 0);
 
   }
-
-
-
-
-
-
-
-
 
 }

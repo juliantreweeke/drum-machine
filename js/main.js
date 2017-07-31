@@ -1,3 +1,6 @@
+
+
+
 /*
 
 //
@@ -37,9 +40,6 @@ var notes = [];
 
 var sounds = [];
 
-var bdboxes = [];
-var snboxes = [];
-var hhboxes = [];
 // sequenceur
 var myPart; // un metronome
 var beat = 0; //
@@ -62,6 +62,7 @@ function preload() {
     sounds[0] = loadSound(kicksamples[0]);
     sounds[1] = loadSound('audio/snare.wav');
     sounds[2] = loadSound('audio/hat.wav');
+    sounds[3] = loadSound('audio/hat.wav');
 }
 
 
@@ -83,12 +84,24 @@ var bluecolors = ['#040420','#0101a5','#2121bf','#0650bf','#397ae8','#8bccec','#
 
 // html squares
 
-for (var i = 0; i < 16; i++) {
 
-  kicks2.push(new HtmlSquare(i));
+  // trying to make one cube that you can click on and change colour
+
+  for (var i = 0, j=0 ; i < 16; i++, j+= 40 ) {
+    // top left index
+  kicks2.push(new HtmlSquare('320',j,i));
+  }
+
+  for (var i = 0; i < kicks2.length; i++) {
+    kicks2[i].display();
+  };
 
 
-}
+
+
+
+
+
 
 
 
@@ -234,35 +247,11 @@ function mousePressed() {
 
 }
 
-function mouseReleased() {
-
-
-
-
-// console.log(notes[1]);
-// console.log(beat);
-
-// wave.freq(notes[0],notes[1]);
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function draw() {
 
 
-  console.log('reverbSize', controller.reverbSize, reverb);
+  // console.log('reverbSize', controller.reverbSize, reverb);
 
   // Draw an ellipse with size based on volume
 
@@ -294,13 +283,6 @@ function draw() {
   // console.log(velocityScale);
 
   // draw filtered spectrum
-  var spectrum = fft.analyze();
-  noStroke();
-  for (var i = 0; i < spectrum.length; i++) {
-    var x = map(i, 0, spectrum.length, 0, width);
-    var h = -height + map(spectrum[i], 0, 255, height, 0);
-    rect(x, height, width/spectrum.length, h);
-  }
 
 
 
@@ -370,7 +352,6 @@ function step() {
     if (kicks[beat].active === true) {
         sounds[0].play(0)
        kicks[beat].col = color(250,1,1);
-
     }
 
 
@@ -399,6 +380,10 @@ function step() {
 
     if (basses[beat].active === false) {
         bass.amp(0);
+    }
+
+    if (kicks2[beat].active === true) {
+        sounds[3].play(0)
     }
 
 
