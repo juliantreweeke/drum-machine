@@ -19,6 +19,27 @@ color:white;
   background-color:black;
 }
 
+.synthpad {
+  border-collapse: collapse;
+  box-sizing: border-box;
+  position: absolute;
+  width:40px;
+  height:40px;
+  border:green 2px solid;
+  background-color:black;
+}
+
+.basspad {
+  border-collapse: collapse;
+  box-sizing: border-box;
+  position: absolute;
+  width:40px;
+  height:40px;
+  border:red 2px solid;
+  background-color:black;
+}
+
+
 .boxo {
   width:40px;
   height:40px;

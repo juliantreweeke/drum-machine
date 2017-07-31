@@ -22,15 +22,7 @@ wave.amp(0);
 wave.freq(110);
 wave.start();
 
-var bass;
-bass = new p5.Oscillator();
-bass.setType('triangle');
-bass.amp(0);
-bass.freq(55);
-bass.start();
-var basses = [];
-var bassmelody = [];
-var basskey = [55,110,123,130,146,164,174,195];
+
 
 
 var slider;
@@ -59,41 +51,61 @@ var kicksamples = ['audio/defaultkick.wav','audio/dnbkick.wav','audio/druidkick.
 
 
 function preload() {
-    sounds[0] = loadSound(kicksamples[0]);
-    sounds[1] = loadSound('audio/snare.wav');
-    sounds[2] = loadSound('audio/hat.wav');
-    sounds[3] = loadSound('audio/hat.wav');
+
+    sounds[3] = loadSound(kicksamples[0]);
+    sounds[4] = loadSound('audio/snare.wav');
+    sounds[5] = loadSound('audio/hat.wav');
 }
 
 
 
-// drum arrays
 
-var kicks = [];
-var snares = [];
-var hats = [];
+// html drum array
 
 var kicks2 = [];
+var snares2 = [];
+var hats2 = [];
 
-
-// synth stuff
-var synths = [];
+// html synth stuff
+var synths2 = [];
 var synthskey = [110,440,493,523,587,659,698,783];
 var synthmelody = [];
 var bluecolors = ['#040420','#0101a5','#2121bf','#0650bf','#397ae8','#8bccec','#d1d1f0','#e9e9f4'];
 
-// html squares
+// bass stuff
+
+var bass;
+bass = new p5.Oscillator();
+bass.setType('triangle');
+bass.amp(0);
+bass.freq(55);
+bass.start();
+
+var basses = [];
+
+var basses2 = [];
+
+var bassmelody = [];
+var basskey = [55,110,123,130,146,164,174,195];
 
 
-  // trying to make one cube that you can click on and change colour
+  // generate each individual sound pad from object constructors
 
   for (var i = 0, j=0 ; i < 16; i++, j+= 40 ) {
     // top left index
-  kicks2.push(new HtmlSquare('320',j,i));
+  kicks2.push(new HtmlSquare('320',j,i,'kick'));
+  snares2.push(new HtmlSquare('360',j,i,'snare'));
+  hats2.push(new HtmlSquare('400',j,i,'hat'));
+  synths2.push(new HtmlSynth('480',j,i,'synth'));
+  basses2.push(new HtmlBass('540',j,i,'bass'));
   }
 
   for (var i = 0; i < kicks2.length; i++) {
     kicks2[i].display();
+    snares2[i].display();
+    hats2[i].display();
+    synths2[i].display();
+    basses2[i].display();
   };
 
 
@@ -144,10 +156,8 @@ function setup() {
     var y = 0;
 
     // kicks2.push(new HtmlSquare(x, y, i));
-    kicks.push(new Square(x, y, i));
-    snares.push(new Square(x, 40, i));
-    hats.push(new Square(x, 80, i));
-    synths.push(new SynthSquare(x, 160, i));
+
+
     basses.push(new BassSquare(x, 240, i));
 
 
@@ -226,24 +236,14 @@ function setup() {
 
 
 function mousePressed() {
-  notes[beat]=(mouseX);
 
 
-  for (var i = 0; i < kicks.length; i++) {
-    kicks[i].clicked();
-    snares[i].clicked();
-    hats[i].clicked();
-    synths[i].clicked();
+
+  for (var i = 0; i < 16; i++) {
+
     basses[i].clicked();
   }
 
-  if (mouseY > 500 ){
-
-    wave.amp(0.2);
-
-    wave.freq(mouseX);
-
-  }
 
 }
 
@@ -292,12 +292,10 @@ function draw() {
 
 
   // background(0);
-  for (var i = 0; i < kicks.length; i++) {
+  for (var i = 0; i < 16; i++) {
     // kicks[i].move();
-    kicks[i].display();
-    snares[i].display();
-    hats[i].display();
-    synths[i].display();
+
+
     basses[i].display();
 
 
@@ -306,8 +304,8 @@ function draw() {
 
 
     // alert($('#1')).;
-    fill(255,255,255);
-    rect(0 + beat * 40, 0, 40, 120);
+    // fill(255,255,255);
+    // rect(0 + beat * 40, 0, 40, 120);
 
 
 
@@ -328,62 +326,56 @@ function draw() {
 
 } // function draw
 
-// frenchy
-
-function drawWave(col, wav) {
-    noFill();
-    stroke(col);
-    strokeWeight(1);
-
-    beginShape();
-    for (var i = 0; i < wav.length; i++) {
-        var x = map(i, 0, wav.length, 0, width / 2);
-        var y = map(wav[i], -1, 1, height * 1 / 4, height * 3 / 4);
-        vertex(x, y);
-    }
-    endShape();
-}
 
 
 
 function step() {
   // debugger;
 
-    if (kicks[beat].active === true) {
-        sounds[0].play(0)
-       kicks[beat].col = color(250,1,1);
-    }
-
-
-
-    if (snares[beat].active === true) {
-        sounds[1].play(0)
-    }
-
-    if (hats[beat].active === true) {
-        sounds[2].play(0)
-    }
-
-    if (synths[beat].active === true) {
+    if (synths2[beat].active === true) {
         wave.amp(0.1);
         wave.freq(synthmelody[beat]);
     }
 
-    if (synths[beat].active === false) {
+    if (synths2[beat].active === false) {
         wave.amp(0);
-    }
+    };
 
-    if (basses[beat].active === true) {
+    if (basses2[beat].active === true) {
+
         bass.amp(0.6);
         bass.freq(bassmelody[beat]);
     }
 
-    if (basses[beat].active === false) {
+    if (basses2[beat].active === false) {
+        // wave.amp(0);
         bass.amp(0);
     }
 
+
+
+
+
+
+    // if (basses[beat].active === true) {
+    //     bass.amp(0.6);
+    //     bass.freq(bassmelody[beat]);
+    // }
+    //
+    // if (basses[beat].active === false) {
+    //     bass.amp(0);
+    // }
+
     if (kicks2[beat].active === true) {
         sounds[3].play(0)
+    }
+
+    if (snares2[beat].active === true) {
+        sounds[4].play(0)
+    }
+
+    if (hats2[beat].active === true) {
+        sounds[5].play(0)
     }
 
 
