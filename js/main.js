@@ -32,10 +32,17 @@ var timer = 0;
 // drum stuff
 
 var kicksamples = ['audio/defaultkick.wav','audio/dnbkick.wav','audio/druidkick.wav','audio/punchykick.wav'];
+var kickname = ['KICK','DNB KICK','DRUID KICK','PUNCHY'];
+
+var snaresamples = ['audio/snare.wav','audio/resasnare.wav','audio/dnbsnare.wav','audio/tightsnare.wav'];
+var snarename = ['SNARE','RESA SNR','DNB SNR','TIGHT SNR'];
+
+
+
 
 function preload() {
     sounds[1] = loadSound(kicksamples[0]);
-    sounds[2] = loadSound('audio/snare.wav');
+    sounds[2] = loadSound(snaresamples[0]);
     sounds[3] = loadSound('audio/hat.wav');
 }
 
@@ -44,9 +51,12 @@ var snares = [];
 var hats = [];
 
 // html synth stuff
+
+wavetypes = ['square','triangle','sine','sawtooth'];
+
 var wave;
 wave = new p5.Oscillator();
-wave.setType('square');
+wave.setType(wavetypes[0]);
 wave.amp(0);
 wave.freq(110);
 wave.start();
@@ -69,13 +79,14 @@ var basskey = [55,110,123,130,146,164,174,195];
 
   // generate each individual sound pad from object constructors
 
-  for (var i = 0, j=0 ; i < 16; i++, j+= 40 ) {
+  for (var i = 0, j=350 ; i < 16; i++, j+= 40 ) {
     // top left index
-  kicks.push(new HtmlSquare('320',j,i,'kick'));
-  snares.push(new HtmlSquare('360',j,i,'snare'));
-  hats.push(new HtmlSquare('400',j,i,'hat'));
-  synths.push(new HtmlSynth('480',j,i,'synth'));
-  basses.push(new HtmlBass('540',j,i,'bass'));
+  // kicks.push(new HtmlSquare('320',j,i,'kick'));
+  kicks.push(new HtmlSquare('120',j,i,'kick'));
+  snares.push(new HtmlSquare('160',j,i,'snare'));
+  hats.push(new HtmlSquare('200',j,i,'hat'));
+  synths.push(new HtmlSynth('280',j,i,'synth'));
+  basses.push(new HtmlBass('340',j,i,'bass'));
   }
 
   for (var i = 0; i < kicks.length; i++) {
@@ -103,7 +114,7 @@ var basskey = [55,110,123,130,146,164,174,195];
 
 function setup() {
 
-  var c = createCanvas(700, 500);
+  var c = createCanvas(1000, 2000);
   c.parent('p5Div');
 
   filter = new p5.BandPass();

@@ -7,14 +7,60 @@ $(document).ready(function(){
 
 
   var kickcounter = 0;
+  var snarecounter = 0;
+  var synthcounter = 0;
+  var basscounter = 0;
   console.log(kicksamples.length);
 
-  $('#toggle').click(function(){
 
+  $('.kicktoggle').click(function(){
       kickcounter++;
       kickcounter = kickcounter % kicksamples.length;
       sounds[1] = loadSound(kicksamples[kickcounter]);
+      $(this).text(kickname[kickcounter]);
   })
+
+  $('.snaretoggle').click(function(){
+      snarecounter++;
+      snarecounter = snarecounter % snaresamples.length;
+      sounds[2] = loadSound(snaresamples[snarecounter]);
+      $(this).text(snarename[snarecounter]);
+  })
+
+  $('.synthtoggle').click(function(){
+      synthcounter++;
+      synthcounter = synthcounter % wavetypes.length;
+      wave.setType(wavetypes[synthcounter]);
+      $(this).text(wavetypes[synthcounter]);
+  })
+
+  $('.basstoggle').click(function(){
+      basscounter++;
+      basscounter = basscounter % wavetypes.length;
+      bass.setType(wavetypes[basscounter]);
+      $(this).text(wavetypes[basscounter]);
+  })
+
+
+  $('.tempoup').click(function(){
+      bpm++;
+      myPart.setBPM(bpm);
+      $('.tempo').text(bpm.toString());
+  })
+
+  $('.tempodown').click(function(){
+      bpm--;
+      myPart.setBPM(bpm);
+      $('.tempo').text(bpm.toString());
+  })
+
+
+
+
+
+
+
+
 
   var createBoard = function () {
     var $board = $('<table></table>');

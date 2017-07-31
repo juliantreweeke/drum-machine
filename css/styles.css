@@ -1,7 +1,95 @@
+
+
+
+
+
+
+
+
+
+/*flex box layout*/
+
+.container{
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  text-align: center;
+
+}
+
+  .header{
+    width: 100%;
+    height: 80px;
+    background: black;
+
+  }
+
+  .holygrail-body{
+    flex: 1 0 auto;
+    display: flex;
+
+    .content{
+      flex: 1 0 auto;
+      background: black;
+    }
+
+    .nav{
+      width: 100px;
+      list-style: none;
+      text-align: left;
+      order: -1;
+      background: black;
+      margin: 0;
+    }
+
+    .aside{
+      width: 100px;
+      background: black;
+    }
+  }
+
+  .footer{
+    width: 100%;
+    height: 60px;
+    background: cyan;
+  }
+
+  @media (max-width: 700px) {
+    .holygrail-body{
+       flex-direction: column;
+
+      .nav, .aside{
+        width: 100%;
+      }
+    }
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #p5Div, #threejsDiv {
-  position: absolute;
+  /*display: inline-block;*/
+  position: relative;
   top: 0;
   left: 0;
+  width: 100%;
+  height:100%;
 }
 #p5Div {
   z-index: 1;
@@ -42,12 +130,11 @@ background-color: blue;
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
   box-sizing: content-box;
-  padding: 10px;
   overflow: hidden;
   border: none;
   font: normal 25px/1 "VT323", Helvetica, sans-serif;
   color:rgb(0, 156, 255);
-  text-align: center;
+  /*text-align: center;*/
   -o-text-overflow: ellipsis;
   text-overflow: ellipsis;
   text-shadow: 5px 5px 0 rgba(1, 19, 144, 1) ;
@@ -56,9 +143,11 @@ background-color: blue;
 
 #main {
 z-index:3;
-position:absolute;
+flex: 1 0 auto;
+/*display:contents;*/
+/*position:absolute;*/
 
-color:white;
+/*color:white;*/
 }
 
 td {
@@ -68,7 +157,9 @@ color:white;
 .pad {
   border-collapse: collapse;
   box-sizing: border-box;
-  position: absolute;
+  /*position: relative;*/
+  /*position: absolute;*/
+  position:absolute;
   width:40px;
   height:40px;
   border:blue 2px solid;
@@ -107,7 +198,7 @@ color:white;
   position: absolute;
   width:40px;
   height:40px;
-  border:red 2px solid;
+  border:rgb(0, 68, 111) 2px solid;
   background-color:black;
   transition: 100ms ease-in-out 0s;
   opacity: 0.8;
@@ -126,13 +217,77 @@ table, tr, td {
   box-sizing: border-box;
 }
 
-#toggle {
-z-index: 2;
-position:absolute;
-top:10px;
-right:550px;
-
+.kicktoggle {
+top:120px;
 }
+
+.snaretoggle {
+top:160px;
+}
+
+.synthtoggle {
+top:280px;
+/*background-image: url(../images/sine.png);*/
+}
+
+.basstoggle {
+top:340px;
+/*background-image: url(../images/sine.png);*/
+}
+
+.tempobuttons {
+  left:230px;
+  position:absolute;
+  background-color: black;
+  opacity: 0.8;
+  border: 1px solid blue;
+  box-sizing: border-box;
+  height: 40px;
+  width: 40px;
+  z-index: 3;
+}
+
+
+
+
+.tempo {
+left:270px;
+top:380px;
+/*background-image: url(../images/sine.png);*/
+}
+
+.tempoup {
+left:310px;
+top:380px;
+/*background-image: url(../images/sine.png);*/
+}
+
+.tempodown {
+left:230px;
+top:380px;
+/*background-image: url(../images/sine.png);*/
+}
+
+
+
+
+.samplebuttons {
+  left:230px;
+  position:absolute;
+  background-color: black;
+  opacity: 0.8;
+  border: 1px solid blue;
+  box-sizing: border-box;
+  height: 40px;
+  width: 120px;
+  z-index: 3;
+}
+
+
+
+
+
+
 
 #p5Div {
 position: absolute;
