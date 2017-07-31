@@ -13,7 +13,7 @@ $(document).ready(function(){
 
       kickcounter++;
       kickcounter = kickcounter % kicksamples.length;
-      sounds[0] = loadSound(kicksamples[kickcounter]);
+      sounds[1] = loadSound(kicksamples[kickcounter]);
   })
 
   var createBoard = function () {

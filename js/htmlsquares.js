@@ -28,15 +28,23 @@ function HtmlSquare(top,left,i,name) {
 
     if (self.active){
       self.active = false;
+      // $('#' + self.name ).addClass("off");
+
       $('#' + self.name ).css({
-      backgroundColor: 'black'
+      border:'blue 1px solid'
       });
 
     } else {
+
       self.active = true;
+
+      // $('#' + self.name ).addClass("on");
+
       $('#' + self.name ).css({
-      backgroundColor: 'blue'
+        border:'lightblue 1px solid'
+      // backgroundColor: 'blue'
       });
+
     }
 
   }

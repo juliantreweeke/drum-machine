@@ -60,7 +60,7 @@ app.init = function(){
 
 
   app.cube = app.createCube( 15, 15, 15, 5 );
-  app.scene.add( app.cube );
+  // app.scene.add( app.cube );
 
 
 

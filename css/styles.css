@@ -1,3 +1,59 @@
+#p5Div, #threejsDiv {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+#p5Div {
+  z-index: 1;
+}
+
+#html {
+  z-index: 2;
+  /*display:none;*/
+}
+
+body {
+margin: 0;
+overflow: hidden;
+}
+
+
+
+
+
+
+
+.off {
+border:'blue 1px solid';
+
+}
+
+.on {
+border:'lightblue 1px solid'
+background-color: blue;
+}
+
+
+
+
+
+.retrotext {
+  display: inline-block;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  padding: 10px;
+  overflow: hidden;
+  border: none;
+  font: normal 25px/1 "VT323", Helvetica, sans-serif;
+  color:rgb(0, 156, 255);
+  text-align: center;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  text-shadow: 5px 5px 0 rgba(1, 19, 144, 1) ;
+}
+
+
 #main {
 z-index:3;
 position:absolute;
@@ -17,6 +73,8 @@ color:white;
   height:40px;
   border:blue 2px solid;
   background-color:black;
+  opacity: 0.8;
+  border-radius: 5px;
 }
 
 .synthpad {
@@ -25,9 +83,23 @@ color:white;
   position: absolute;
   width:40px;
   height:40px;
-  border:green 2px solid;
+  border:rgb(0, 82, 167) 2px solid;
   background-color:black;
+  transition: 500ms linear 0s;
+  opacity: 0.8;
+  border-radius: 5px;
+
+
 }
+
+.synthpad:hover {
+
+  border:white;
+
+
+}
+
+
 
 .basspad {
   border-collapse: collapse;
@@ -37,6 +109,9 @@ color:white;
   height:40px;
   border:red 2px solid;
   background-color:black;
+  transition: 100ms ease-in-out 0s;
+  opacity: 0.8;
+  border-radius: 5px;
 }
 
 

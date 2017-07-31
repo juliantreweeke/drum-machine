@@ -1,29 +1,8 @@
 
-
-
-/*
-
-//
-
-6.7 p5.js clicking on objects
-Code for video https://vimeo.com/channels/learningp5js/141919520
-*/
-
-// var app = app || {};
 var reverb;
 var controller = {
   reverbSize: 13
 };
-
-var wave;
-wave = new p5.Oscillator();
-wave.setType('square');
-wave.amp(0);
-wave.freq(110);
-wave.start();
-
-
-
 
 var slider;
 
@@ -45,46 +24,45 @@ var fft1, fft2, fft3, fft4;
 var counter = 0;
 var timer = 0;
 
+
+
+
+
+
+// drum stuff
+
 var kicksamples = ['audio/defaultkick.wav','audio/dnbkick.wav','audio/druidkick.wav','audio/punchykick.wav'];
 
-
-
-
 function preload() {
-
-    sounds[3] = loadSound(kicksamples[0]);
-    sounds[4] = loadSound('audio/snare.wav');
-    sounds[5] = loadSound('audio/hat.wav');
+    sounds[1] = loadSound(kicksamples[0]);
+    sounds[2] = loadSound('audio/snare.wav');
+    sounds[3] = loadSound('audio/hat.wav');
 }
 
-
-
-
-// html drum array
-
-var kicks2 = [];
-var snares2 = [];
-var hats2 = [];
+var kicks = [];
+var snares = [];
+var hats = [];
 
 // html synth stuff
-var synths2 = [];
+var wave;
+wave = new p5.Oscillator();
+wave.setType('square');
+wave.amp(0);
+wave.freq(110);
+wave.start();
+var synths = [];
 var synthskey = [110,440,493,523,587,659,698,783];
 var synthmelody = [];
 var bluecolors = ['#040420','#0101a5','#2121bf','#0650bf','#397ae8','#8bccec','#d1d1f0','#e9e9f4'];
 
 // bass stuff
-
 var bass;
 bass = new p5.Oscillator();
 bass.setType('triangle');
 bass.amp(0);
 bass.freq(55);
 bass.start();
-
 var basses = [];
-
-var basses2 = [];
-
 var bassmelody = [];
 var basskey = [55,110,123,130,146,164,174,195];
 
@@ -93,19 +71,19 @@ var basskey = [55,110,123,130,146,164,174,195];
 
   for (var i = 0, j=0 ; i < 16; i++, j+= 40 ) {
     // top left index
-  kicks2.push(new HtmlSquare('320',j,i,'kick'));
-  snares2.push(new HtmlSquare('360',j,i,'snare'));
-  hats2.push(new HtmlSquare('400',j,i,'hat'));
-  synths2.push(new HtmlSynth('480',j,i,'synth'));
-  basses2.push(new HtmlBass('540',j,i,'bass'));
+  kicks.push(new HtmlSquare('320',j,i,'kick'));
+  snares.push(new HtmlSquare('360',j,i,'snare'));
+  hats.push(new HtmlSquare('400',j,i,'hat'));
+  synths.push(new HtmlSynth('480',j,i,'synth'));
+  basses.push(new HtmlBass('540',j,i,'bass'));
   }
 
-  for (var i = 0; i < kicks2.length; i++) {
-    kicks2[i].display();
-    snares2[i].display();
-    hats2[i].display();
-    synths2[i].display();
-    basses2[i].display();
+  for (var i = 0; i < kicks.length; i++) {
+    kicks[i].display();
+    snares[i].display();
+    hats[i].display();
+    synths[i].display();
+    basses[i].display();
   };
 
 
@@ -125,45 +103,17 @@ var basskey = [55,110,123,130,146,164,174,195];
 
 function setup() {
 
-  // var c = createCanvas(windowWidth, windowHeight);
-  // var c = createCanvas(700, windowHeight);
   var c = createCanvas(700, 500);
   c.parent('p5Div');
-  // createCanvas(1000, 1000);
-
-  // filter stuff
 
   filter = new p5.BandPass();
   noise = new p5.Noise();
   // disconnect unfiltered noise,
   // and connect to filter
-
   fft = new p5.FFT();
 
+  //Sequencer stuff
 
-  // filto = new p5.BandPass();
-
-
-
-
-
-
-  for (var i = 0, j=0 ; i < 16; i++, j+=40) {
-
-    // var x = random(width);
-    // var y = random(height);
-    var x = j;
-    var y = 0;
-
-    // kicks2.push(new HtmlSquare(x, y, i));
-
-
-    basses.push(new BassSquare(x, 240, i));
-
-
-  }
-
-  //Sequencer
     myPart = new p5.Part();
     var pulse = new p5.Phrase('pulse', step, [1, 1, 1, 1]);
     myPart.addPhrase(pulse);
@@ -176,8 +126,6 @@ function setup() {
 
     // ---------------------------------------------------
     // dat gui stuff
-
-
 
     var gui = new dat.GUI();
     gui.add(controller, 'reverbSize', 0, 100).onFinishChange(function(val){
@@ -198,9 +146,7 @@ function setup() {
   // delay.process() accepts 4 parameters:
   // source, delayTime, feedback, filter frequency
   // play with these numbers!!
-    delay.process(wave, .80, .7, 4000);
-
-
+    delay.process(wave, 56/bpm, .7, 4000);
 
     // ---------------------------------------------------
 
@@ -233,25 +179,10 @@ function setup() {
 
 
 
-
-
-function mousePressed() {
-
-
-
-  for (var i = 0; i < 16; i++) {
-
-    basses[i].clicked();
-  }
-
-
-}
-
-
 function draw() {
 
 
-  // console.log('reverbSize', controller.reverbSize, reverb);
+
 
   // Draw an ellipse with size based on volume
 
@@ -274,55 +205,10 @@ function draw() {
 
   // console.log(wavecolor, "wavecolor");
 
-
-
-
-
-
   var velocityScale = map(mouseY, 0, windowHeight, -2, 2) * 100;
   // console.log(velocityScale);
 
   // draw filtered spectrum
-
-
-
-
-
-
-
-
-  // background(0);
-  for (var i = 0; i < 16; i++) {
-    // kicks[i].move();
-
-
-    basses[i].display();
-
-
-
-
-
-
-    // alert($('#1')).;
-    // fill(255,255,255);
-    // rect(0 + beat * 40, 0, 40, 120);
-
-
-
-
-
-
-
-
-
-  }
-
-
-
-
-
-
-
 
 } // function draw
 
@@ -330,59 +216,108 @@ function draw() {
 
 
 function step() {
+
+  var previousKick = $('#' + 'kick' + (beat - 1) );
+  if (beat === 0){
+    previousKick = $('#' + 'kick' + 15 );
+  }
+  previousKick.css({
+  border: 'blue solid 2px'
+  });
+
+  // $('#' + 'kick' + beat ).css({
+
+  // });
+  //
+  //
+  //
+  // var previousBeat = beat - 1;
+  // if (beat === 0){
+  //   previousBeat = 16;
+  // }
+  //
+  // // console.log( beat - 1 + "previous beat",beat, "beat now"  );
+  //
+  //
+  // if ( kicks[0].active === true ) {
+  //   previousKick.css({
+  //   backgroundColor: 'blue'
+  //   });
+  // } else {
+  //   previousKick.css({
+  //   backgroundColor: 'black'
+  //   });
+  // }
+  //
+
+
+
+
+
+
+  // if ( $('#' + 'kick' + (beat - 1).attr('active').val() === 'true' ) ){
+  //   backgroundColor: 'blue'
+  // }
+
+
+
+
   // debugger;
 
-    if (synths2[beat].active === true) {
+    if (synths[beat].active === true) {
         wave.amp(0.1);
         wave.freq(synthmelody[beat]);
     }
 
-    if (synths2[beat].active === false) {
+    if (synths[beat].active === false) {
         wave.amp(0);
+
     };
 
-    if (basses2[beat].active === true) {
+    if (basses[beat].active === true) {
 
         bass.amp(0.6);
         bass.freq(bassmelody[beat]);
     }
 
-    if (basses2[beat].active === false) {
+    if (basses[beat].active === false) {
         // wave.amp(0);
         bass.amp(0);
     }
 
+    if (kicks[beat].active === true) {
+        sounds[1].play(0)
+        // $('#' + 'kick' + beat )
+
+        $('#' + 'kick' + beat ).effect( "bounce", { times: 3 }, "slow" ).css({
+        border:'lightblue 3px solid'
+        });
+
+    }
+
+    if (kicks[beat].active === false) {
+
+        $('#' + 'kick' + beat ).css({
+        border: 'white solid 2px'
+        });
+
+    }
 
 
 
 
 
-    // if (basses[beat].active === true) {
-    //     bass.amp(0.6);
-    //     bass.freq(bassmelody[beat]);
-    // }
-    //
-    // if (basses[beat].active === false) {
-    //     bass.amp(0);
-    // }
+    if (snares[beat].active === true) {
 
-    if (kicks2[beat].active === true) {
+        sounds[2].play(0)
+        $('#' + 'snare' + beat ).effect( "shake" );
+
+    }
+
+    if (hats[beat].active === true) {
         sounds[3].play(0)
+        $('#' + 'hat' + beat ).effect( "bounce", { times: 6 }, "fast" );
     }
-
-    if (snares2[beat].active === true) {
-        sounds[4].play(0)
-    }
-
-    if (hats2[beat].active === true) {
-        sounds[5].play(0)
-    }
-
-
-
-
-
-
 
     beat += 1;
     beat = beat % 16;
