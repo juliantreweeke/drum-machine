@@ -240,6 +240,7 @@ function setup() {
 
     wave.disconnect();
     bass.disconnect();
+
     delay.process(wave, 56/bpm, .7, 4000);
     // delay.disconnect();
 
@@ -340,6 +341,9 @@ function setup() {
     fftkick = new p5.FFT();
     fftkick.setInput(sounds[1]);
 
+    fftsnare = new p5.FFT();
+    fftsnare.setInput(sounds[2]);
+
 
 
     // recording stuff
@@ -433,6 +437,13 @@ function draw() {
     // rect(x, height, width / spectrum.length, h )
   }
 
+  var snareSpectrum = fftsnare.analyze();
+
+  for (var i = 0; i < 20; i++){
+    stroke(random(250));
+    fill(0,0,random(250));
+    ellipse(random(1000), 200 , 50, snareSpectrum[i] / 2 );
+  }
 
 
 

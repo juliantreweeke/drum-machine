@@ -17,6 +17,7 @@ $(document).ready(function(){
       kickcounter++;
       kickcounter = kickcounter % kicksamples.length;
       sounds[1] = loadSound(kicksamples[kickcounter]);
+      fftkick.setInput(sounds[1]);
       $(this).text(kickname[kickcounter]);
   })
 
@@ -24,6 +25,7 @@ $(document).ready(function(){
       snarecounter++;
       snarecounter = snarecounter % snaresamples.length;
       sounds[2] = loadSound(snaresamples[snarecounter]);
+      fftsnare.setInput(sounds[2]);
       $(this).text(snarename[snarecounter]);
   })
 
@@ -91,32 +93,79 @@ $(document).ready(function(){
 
     // use the '.enabled' boolean to make sure user enabled the mic (otherwise we'd record silence)
   if (state === 0 && mic.enabled) {
+    masterVolume(0);
+
+    // setDeceleratingTimeout(function(){ alert('hi'); }, 10, 10);
+
+    // $(this).text('1').delay( 800 );
+    // $(this).text('2').delay( 1800 );
+
+    // $( "#foo" ).slideUp( 300 )
+
+    // $(this).text('2');
+    // $(this).text('2');
+    // $(this).text('3');
+    // $(this).text('GO!');
+
+    var recordCountDown = setInterval(function(){ myTimer() }, 1000);
+    var countdown = 1;
+
+    function myTimer() {
+      if(countdown === 4 ){
+
+        $('.recordbutton').text("GO!");
+
+      }
+
+      else if(countdown === 5 ){
+        $('.recordbutton').text('RECORDING');
+        recorder.record(soundFile);
+        state++;
+        clearInterval(recordCountDown);
+
+
+      }
+
+      else {
+        $('.recordbutton').text(countdown);
+      }
+
+      countdown++;
+
+    } // function myTimer
+
+
+
+
+
+
+
+
 
     // Tell recorder to record to a p5.SoundFile which we will use for playback
-    recorder.record(soundFile);
 
-    background(255,0,0);
-    text('Recording now! Click to stop.', 20, 20);
-    state++;
-    alert("about to record");
+
+
+    // background(255,0,0);
+    // text('Recording now! Click to stop.', 20, 20);
+
+    // alert("about to record");
   }
 
   else if (state === 1) {
     recorder.stop(); // stop recorder, and send the result to soundFile
 
-    background(0,255,0);
-    text('Recording stopped. Click to play & save', 20, 20);
+    $(this).text('PLAY');
     state++;
-    alert("recording stopped");
-
   }
 
   else if (state === 2) {
-    alert("about to play");
-
+    // alert("about to play");
+    masterVolume(1);
     soundFile.play(); // play the result!
     // saveSound(soundFile, 'mySound.wav'); // save file
-    state++;
+    state = 0;
+    $(this).text('REC');
   }
 
   });
