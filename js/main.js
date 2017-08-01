@@ -1,11 +1,27 @@
 
+// recording variables
+
+var mic, recorder, soundFile;
+var state = 0; // mousePress will increment from Record, to Stop, to Play
+
+
+
+
+
+
 var reverb;
 var reverbSize;
+
 var reverbDecay;
 var settings;
-// var controller = {
-//   reverbSize: 13
-// };
+var rSlider;
+var controller = {
+  Filter: 4000,
+  ReverbTime: 100,
+  ReverbDecay:1,
+};
+
+var drawn = [];
 
 var slider;
 
@@ -79,6 +95,10 @@ var basses = [];
 var bassmelody = [];
 var basskey = [55,110,123,130,146,164,174,195];
 
+// recording stuff
+
+var recs = [];
+
 
   // generate each individual sound pad from object constructors
 
@@ -91,6 +111,7 @@ var basskey = [55,110,123,130,146,164,174,195];
   hats.push(new HtmlSquare('200',j,i,'hat'));
   synths.push(new HtmlSynth('280',j,i,'synth'));
   basses.push(new HtmlBass('340',j,i,'bass'));
+  recs.push(new RecordSquare('400',j,i,'rec'));
   }
 
   for (var i = 0; i < kicks.length; i++) {
@@ -99,6 +120,7 @@ var basskey = [55,110,123,130,146,164,174,195];
     hats[i].display();
     synths[i].display();
     basses[i].display();
+    recs[i].display();
   };
 
   // var gui = createGui('Label');
@@ -124,6 +146,9 @@ function setup() {
   var c = createCanvas(windowWidth, windowHeight);
   c.parent('p5Div');
 
+  slider = document.getElementById("slider");
+
+
 
 
 
@@ -133,7 +158,7 @@ function setup() {
   noise = new p5.Noise();
   // disconnect unfiltered noise,
   // and connect to filter
-  fft = new p5.FFT();
+  // fft = new p5.FFT();
 
   //Sequencer stuff
 
@@ -150,12 +175,37 @@ function setup() {
     // ---------------------------------------------------
     // dat gui stuff
 
-    // var gui = new dat.GUI();
-    // gui.add(controller, 'reverbSize', 0, 100).onFinishChange(function(val){
-    //   // update Revervb
-    //   // reverb.set(2, parseInt(controller.reverbSize));
-    //   reverb.process(wave, val, 2);
-    // });
+    var gui = new dat.GUI();
+    gui.add(controller, 'Filter', 40, 4000).onFinishChange(function(val){
+      // update Revervb
+      // reverb.set(2, parseInt(controller.reverbSize));
+      // reverb.process(wave, val, 2);
+
+      filter.freq(val);
+
+    });
+    gui.add(controller, 'ReverbTime', 1, 99).onFinishChange(function(val){
+      // update Revervb
+      // reverb.set(2, parseInt(controller.reverbSize));
+
+      reverb.set(val, 1 ,false);
+
+    });
+
+    gui.add(controller, 'ReverbDecay', 1, 99).onFinishChange(function(val){
+      // update Revervb
+      // reverb.set(2, parseInt(controller.reverbSize));
+
+      reverb.set(1, val ,false);
+
+    });
+
+
+
+
+
+
+
 
     // p5.gui stuff
 
@@ -173,26 +223,94 @@ function setup() {
     // });
 
 
+    filterFreq = 4000;
+    filterWidth = 1;
+    //
+    filter = new p5.LowPass(); // création d'un filtre de type lowpass
+    // on déconnecte nos sources de la sortie principale
+    filter.freq(filterFreq);
+  // give the filter a narrow band (lower res = wider bandpass)
+    filter.res(filterWidth);
 
 
-
-
-    // reverbSize = controller.reverbSize;
-    reverbSize = 50;
-    reverbDecay = 100;
-    reverb = new p5.Reverb(); // création de la reverb
-    // debugger;
-    // reverb.process(sounds[0], reverbTime, reverbDecay); //
-    reverb.process(wave, 2, 2); //
-
-
-
+    sounds[1].disconnect();
+    sounds[2].disconnect();
+    sounds[3].disconnect();
     delay = new p5.Delay();
 
-  // delay.process() accepts 4 parameters:
-  // source, delayTime, feedback, filter frequency
-  // play with these numbers!!
+    wave.disconnect();
+    bass.disconnect();
     delay.process(wave, 56/bpm, .7, 4000);
+    // delay.disconnect();
+
+    filter.process(sounds[1]);
+    filter.process(sounds[2]);
+    filter.process(sounds[3]);
+    // filter.process(wave,delay);
+    filter.process(bass);
+    // reverb :
+
+    reverbTime = 1;
+    reverbDecay = 100;
+    reverb = new p5.Reverb(); // création de la reverb
+    // filter.disconnect(); // on déconnecte le filtre de la sortie principale
+    // on connecte le filtre à la reverb
+    reverb.process(wave, reverbTime, reverbDecay); // 3 second reverbTime, decayRate of 2%
+    // On créer un panneau quicksettings pour pouvoir ajuster le bpm, les paramètres du filtres et de la reverb
+    // on utilisera des fonction de callback anonymes pour mettre à jour les valeurs
+    // settings = QuickSettings.create(windowWidth / 2, 5, "Contols");
+    // settings.addRange("BPM", 60, 180, bpm, 1, function (val) {
+    //     bpm = val
+    //     myPart.setBPM(bpm)
+    // });
+    // settings.addRange("Filter Frequency", 20, 10000, filterFreq, 1, function (val) {
+    //     filterFreq = val
+    //     filter.set(filterFreq, filterWidth)
+    // });
+    // settings.addRange("Filter Width", 1, 50, filterWidth, 1, function (val) {
+    //     filterWidth = val
+    //     filter.set(filterFreq, filterWidth)
+    // });
+    // settings.addRange("Reverb Time", 0, 10, reverbTime, 1, function (val) {
+    //     reverbTime = val
+    //     reverb.process(filter, reverbTime, reverbDecay, false)
+    // });
+    // settings.addRange("Reverb Decay", 0, 100, reverbDecay, 1, function (val) {
+    //     reverbDecay = val
+    //     reverb.process(filter, reverbTime, reverbDecay, false)
+    // });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // // reverbSize = controller.reverbSize;
+    // reverbSize = 50;
+    // reverbDecay = 100;
+    // reverb = new p5.Reverb(); // création de la reverb
+    // // debugger;
+    // // reverb.process(sounds[0], reverbTime, reverbDecay); //
+    // reverb.process(wave, 2, 2); //
+
+
+    //
+
 
     // ---------------------------------------------------
 
@@ -224,10 +342,49 @@ function setup() {
 
 
 
+    // recording stuff
+
+    // create an audio in
+    mic = new p5.AudioIn();
+
+    // users must manually enable their browser microphone for recording to work properly!
+    mic.start();
+
+    // create a sound recorder
+    recorder = new p5.SoundRecorder();
+
+    // connect the mic to the recorder
+    recorder.setInput(mic);
+
+    // create an empty sound file that we will use to playback the recording
+    soundFile = new p5.SoundFile();
+
+
+
+
 
 
 
 } // setup
+
+
+function mousePressed() {
+
+  fill(200,0,0);
+  ellipse(mouseX,mouseY,200,200)
+
+  // Check if mouse is inside the circle
+  var d = dist(mouseX, mouseY, 360, 200);
+  if (d < 100) {
+
+    // Pick new random color values
+
+  }
+}
+
+
+
+
 
 
 
@@ -235,7 +392,12 @@ function setup() {
 
 function draw() {
 
+  background(0);
+
   var velocityScale = map(mouseY, 0, windowHeight, -2, 2) * 100;
+  var sizeScale = map(mouseX, 0, windowWidth, 0.1, 10 );
+
+
   // console.log(velocityScale);
 
 
@@ -285,12 +447,40 @@ function draw() {
 
   // draw filtered spectrum
 
+
+  if( mouseIsPressed ){
+
+
+    fill(0,0,250);
+    ellipse(mouseX, mouseY, 40, 40);
+
+    drawn.push({x: mouseX, y: mouseY, size: 40,col:"blue" });
+    console.log(mouseY);
+    if(mouseY > 100){
+      mouseY += 3000;
+    }
+    filter.freq(mouseY + 100);
+    // console.log(mouseY, "mouse Y");
+    // console.log(mouseX, "mouse X");
+  }
+
+  for (var i = 0; i < drawn.length; i++) {
+    var draw = drawn[i]
+      fill(0,0,random(250));
+      ellipse(draw.x, draw.y, random(draw.size), random(draw.size));
+  }
+
 } // function draw
 
 
 
 
+
 function step() {
+  if (beat > 8){
+    drawn.pop();
+  };
+
 
   var previousKick = $('#' + 'kick' + (beat - 1) );
   if (beat === 0){
@@ -393,6 +583,17 @@ function step() {
         sounds[3].play(0)
         $('#' + 'hat' + beat ).effect( "bounce", { times: 6 }, "fast" );
     }
+
+    if (recs[beat].active === true) {
+        soundFile.play();
+        // $('#' + 'hat' + beat ).effect( "bounce", { times: 6 }, "fast" );
+    }
+
+
+
+
+
+
 
     beat += 1;
     beat = beat % 16;

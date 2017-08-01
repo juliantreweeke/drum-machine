@@ -154,16 +154,9 @@ opacity:1;
 /*color:white;*/
 }
 
-.fullopacity {
-opacity:1;
-}
-
 .noopacity {
-opacity:0;
+opacity:0 !important;
 }
-
-
-
 
 td {
 color:white;
@@ -250,8 +243,16 @@ top:340px;
 /*background-image: url(../images/sine.png);*/
 }
 
+.recordbutton {
+left:230px;
+top:400px;
+
+
+}
+
 .tempobuttons {
   left:230px;
+  top:460px;
   position:absolute;
   background-color: black;
   opacity: 0.8;
@@ -263,11 +264,8 @@ top:340px;
 }
 
 
-
-
 .tempo {
 left:-80px;
-top:380px;
 width: 40px;
 font-size: 20px;
 /*background-image: url(../images/sine.png);*/
@@ -275,13 +273,11 @@ font-size: 20px;
 
 .tempoup {
 left:-40px;
-top:380px;
 /*background-image: url(../images/sine.png);*/
 }
 
 .tempodown {
 left:-120px;
-top:380px;
 /*background-image: url(../images/sine.png);*/
 }
 

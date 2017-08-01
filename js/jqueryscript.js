@@ -56,33 +56,72 @@ $(document).ready(function(){
 
   var fxkickcounter = 0;
   $('.fxkick').click(function(){
-    reverb.process(sounds[1], 10, 10);
+    // reverb.process(sounds[1], 10, 10);
 
       if (fxkickcounter === 1){
-        reverb.disconnect(sounds[1])
+        // reverb.process(sounds[1], 0, 0);
+        reverb.disconnect;
       } else {
         fxkickcounter++;
-        reverb.process(sounds[1], 10, 10); //
+        reverb.connect(sounds[1]);
+        reverb.process(sounds[1], slider.value, 10); //
+        fxkickcounter = 0;
 
       }
   })
 
   var fadecounter = false;
   $('.fadebutton').click(function(){
-    if(fadecounter){
-      $('#main').css("opacity","1")
-      fadecounter = false;
-    } else {
-      $('#main').css("opacity","0")
-      fadecounter = true;
-    }
-    //
-    // $('#main').css("opacity","0")
-    //
-    // $('#main').toggleClass( "noopacity", "fullopacity" );
+
+    // if(fadecounter){
+    //   $('#main').css("opacity","1")
+    //   fadecounter = false;
+    // } else {
+    //   $('#main').css("opacity","0")
+    //   fadecounter = true;
+    // }
+
+
+    $('#main').toggleClass( "noopacity");
 
 
   });
+
+  $('.recordbutton').click(function(){
+
+    // use the '.enabled' boolean to make sure user enabled the mic (otherwise we'd record silence)
+  if (state === 0 && mic.enabled) {
+
+    // Tell recorder to record to a p5.SoundFile which we will use for playback
+    recorder.record(soundFile);
+
+    background(255,0,0);
+    text('Recording now! Click to stop.', 20, 20);
+    state++;
+    alert("about to record");
+  }
+
+  else if (state === 1) {
+    recorder.stop(); // stop recorder, and send the result to soundFile
+
+    background(0,255,0);
+    text('Recording stopped. Click to play & save', 20, 20);
+    state++;
+    alert("recording stopped");
+
+  }
+
+  else if (state === 2) {
+    alert("about to play");
+
+    soundFile.play(); // play the result!
+    // saveSound(soundFile, 'mySound.wav'); // save file
+    state++;
+  }
+
+  });
+
+
 
 
 
