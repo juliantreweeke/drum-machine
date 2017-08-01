@@ -149,9 +149,21 @@ flex: 1 0 auto;
 position:relative;
 top:48%;
 left:32%;
-
+transition: 2s ease-in-out;
+opacity:1;
 /*color:white;*/
 }
+
+.fullopacity {
+opacity:1;
+}
+
+.noopacity {
+opacity:0;
+}
+
+
+
 
 td {
 color:white;
@@ -220,7 +232,7 @@ table, tr, td {
   box-sizing: border-box;
 }
 
-.kicktoggle {
+.kicktoggle, .fxkick {
 top:120px;
 }
 
@@ -277,6 +289,7 @@ top:380px;
 
 
 .samplebuttons {
+  cursor: pointer;
   left:-120px;
   position:absolute;
   background-color: black;
@@ -287,6 +300,20 @@ top:380px;
   width: 120px;
   z-index: 3;
 }
+
+.fx {
+  width:40px;
+  left:640px;
+}
+
+.fadebutton {
+
+  top:20px;
+  left:10px;
+  border: none;
+
+}
+
 
 
 

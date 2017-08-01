@@ -54,49 +54,36 @@ $(document).ready(function(){
       $('.tempo').text(bpm.toString());
   })
 
+  var fxkickcounter = 0;
+  $('.fxkick').click(function(){
+    reverb.process(sounds[1], 10, 10);
 
+      if (fxkickcounter === 1){
+        reverb.disconnect(sounds[1])
+      } else {
+        fxkickcounter++;
+        reverb.process(sounds[1], 10, 10); //
 
-
-
-
-
-
-
-  var createBoard = function () {
-    var $board = $('<table></table>');
-    $('#main').append($board);
-    for (var i = 0; i < 1 ; i++) {
-      var $row = $('<tr></tr>');
-      $('table').append($row);
-      for (var j = 0; j < 16; j++) {
-        var $square = $('<td class="boxo"></td>');
-        $row.append($square)
-      } // j loop
-    } // i loop
-  }
-
-  // var createBox = function (top,left,target) {
-  //
-  //   var $square = $('<td class="test"></td>');
-  //   $('#kicktable').append($square);
-  //   // $('#kicktable').append($square).css({
-  //   // width: this.size, height: this.size, backgroundColor:'white', display:'absolute',
-  //   // top: this.top, left: this.left
-  //   // });
-  // } // j loop
-  //    // i loop
-
-
-  $('.pad').click(function(){
-    alert('clicked');
+      }
   })
 
+  var fadecounter = false;
+  $('.fadebutton').click(function(){
+    if(fadecounter){
+      $('#main').css("opacity","1")
+      fadecounter = false;
+    } else {
+      $('#main').css("opacity","0")
+      fadecounter = true;
+    }
+    //
+    // $('#main').css("opacity","0")
+    //
+    // $('#main').toggleClass( "noopacity", "fullopacity" );
 
 
+  });
 
-
-
-  // createBoard();
 
 
 

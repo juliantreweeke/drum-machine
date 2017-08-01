@@ -1,8 +1,11 @@
 
 var reverb;
-var controller = {
-  reverbSize: 13
-};
+var reverbSize;
+var reverbDecay;
+var settings;
+// var controller = {
+//   reverbSize: 13
+// };
 
 var slider;
 
@@ -24,7 +27,7 @@ var fft1, fft2, fft3, fft4;
 var counter = 0;
 var timer = 0;
 
-
+var gui;
 
 
 
@@ -98,6 +101,9 @@ var basskey = [55,110,123,130,146,164,174,195];
     basses[i].display();
   };
 
+  // var gui = createGui('Label');
+  // gui.addGlobals('reverbDecay');
+
 
 
 
@@ -115,8 +121,13 @@ var basskey = [55,110,123,130,146,164,174,195];
 
 function setup() {
 
-  var c = createCanvas(1000, 2000);
+  var c = createCanvas(windowWidth, windowHeight);
   c.parent('p5Div');
+
+
+
+
+
 
   filter = new p5.BandPass();
   noise = new p5.Noise();
@@ -139,19 +150,42 @@ function setup() {
     // ---------------------------------------------------
     // dat gui stuff
 
-    var gui = new dat.GUI();
-    gui.add(controller, 'reverbSize', 0, 100).onFinishChange(function(val){
-      // update Revervb
-      // reverb.set(2, parseInt(controller.reverbSize));
-      reverb.process(wave, val, 2);
-    });
+    // var gui = new dat.GUI();
+    // gui.add(controller, 'reverbSize', 0, 100).onFinishChange(function(val){
+    //   // update Revervb
+    //   // reverb.set(2, parseInt(controller.reverbSize));
+    //   reverb.process(wave, val, 2);
+    // });
 
-    reverbSize = controller.reverbSize;
+    // p5.gui stuff
+
+
+    // quick settings stuff
+
+    // settings = QuickSettings.create(windowWidth / 5, 10, "Controls");
+    // settings.addRange("Reverb Time", 0, 100, reverbSize, 1, function (val) {
+    //     reverbTime = val
+    //     reverb.process(filter, reverbSize, reverbDecay, false)
+    // });
+    // settings.addRange("Reverb Decay", 0, 100, reverbDecay, 1, function (val) {
+    //     reverbDecay = val
+    //     reverb.process(filter, reverbSize, reverbDecay, false)
+    // });
+
+
+
+
+
+
+    // reverbSize = controller.reverbSize;
+    reverbSize = 50;
     reverbDecay = 100;
     reverb = new p5.Reverb(); // création de la reverb
     // debugger;
     // reverb.process(sounds[0], reverbTime, reverbDecay); //
     reverb.process(wave, 2, 2); //
+
+
 
     delay = new p5.Delay();
 
@@ -179,8 +213,16 @@ function setup() {
 
 
     // Patch the input to an volume analyzer
+    // synth analysis
     analyzer = new p5.Amplitude();
     analyzer.setInput(wave);
+
+    kickanalyzer = new p5.Amplitude();
+
+    fftkick = new p5.FFT();
+    fftkick.setInput(sounds[1]);
+
+
 
 
 
@@ -193,7 +235,8 @@ function setup() {
 
 function draw() {
 
-
+  var velocityScale = map(mouseY, 0, windowHeight, -2, 2) * 100;
+  // console.log(velocityScale);
 
 
   // Draw an ellipse with size based on volume
@@ -208,16 +251,36 @@ function draw() {
   wavecolor = waveshape.analyze();
 
 
+
   for (var i = 0; i < wavecolor.length; i++) {
     stroke(wavecolor[i]);
     fill(0,0,wavecolor[i]);
-    ellipse(540, 400, wavecolor[i],wavecolor[i]);
+    ellipse(random(windowWidth), random(windowHeight), wavecolor[i] + velocityScale,wavecolor[i]);
   }
+
+  var spectrum = fftkick.analyze();
+  // console.log(spectrum);
+
+  // fill(0,255,0); // spectrum is green
+  for (var i = 0; i < spectrum.length / 2; i++){
+    noStroke();
+    fill(0,0,spectrum[i]);
+    ellipse(random(windowWidth) + velocityScale, windowHeight, spectrum[i],spectrum[i] * 100);
+    // var x = map(i, 0, spectrum.length, 0, width);
+    // var h = -height + map(spectrum[i], 0, 255, height, 0);
+    // rect(x, height, width / spectrum.length, h )
+  }
+
+
+
+
+
+
 
 
   // console.log(wavecolor, "wavecolor");
 
-  var velocityScale = map(mouseY, 0, windowHeight, -2, 2) * 100;
+
   // console.log(velocityScale);
 
   // draw filtered spectrum
