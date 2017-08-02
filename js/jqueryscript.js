@@ -72,6 +72,68 @@ $(document).ready(function(){
       }
   })
 
+  // double the values in the synthskey array to change octaves
+  $('.octave').click(function(){
+      synthmelody = octaveUp(synthmelody);
+  });
+
+  $('.octave2').click(function(){
+    synthmelody = octaveDown(synthmelody);
+  });
+
+  $('.bassoctave').click(function(){
+      bassmelody = octaveUp(bassmelody);
+  });
+
+  $('.bassoctave2').click(function(){
+    bassmelody = octaveDown(bassmelody);
+  });
+
+  var octaveUp = function(array){
+    return array.map(function (n) { return n * 2; });
+  };
+
+  var octaveDown = function(array){
+    return array = array.map(function (n) { return n / 2; });
+  };
+
+
+  var clear = function(){
+
+
+    kicks = [];
+    snares = [];
+    hats = [];
+    synths = [];
+    basses = [];
+    recs = [];
+    recs2 = [];
+    beat = 0;
+    createGrid();
+
+  };
+
+  var clearAll = function(array){
+
+    return array = array.map(function (n) { n.active = false });
+
+  };
+
+  $('.clearbutton').click(function(){
+
+    clearAll = clearAll(kicks);
+
+  });
+
+
+
+
+
+
+
+
+
+
 
   $('.fadebutton').click(function(){
     $('#main').toggleClass( "noopacity");
@@ -104,11 +166,65 @@ $(document).ready(function(){
     }
 
 
-
   });
 
 
 
+  // $('recordbutton').click(function(){
+  //
+  //
+  //
+  // })
+
+  var recordsound = function(filename,node){
+
+    if (state === 0 && mic.enabled) {
+      masterVolume(0);
+
+      var recordCountDown = setInterval(function(){ myTimer() }, 1000);
+      var countdown = 1;
+
+      function myTimer() {
+        if(countdown === 4 ){
+
+          $(node).text("GO!");
+
+        }
+
+        else if(countdown === 5 ){
+          $(node).text('RECORDING').addClass('red');
+          recorder.record(filename);
+          state++;
+          clearInterval(recordCountDown);
+        }
+        else {
+          $('.recordbutton').text(countdown);
+        }
+        countdown++;
+      } // function myTimer
+    }
+
+    else if (state === 1) {
+      recorder.stop();
+      $(node).text('PLAY');
+      state++;
+    }
+
+    else if (state === 2) {
+
+      masterVolume(1);
+      filename.play();
+      state = 0;
+      $(node).text('REC');
+    }
+
+    });
+
+
+    $('.recordbutton').click(function(){
+      recordsound(,'.recordbutton')
+
+    });
 
 
 
@@ -116,9 +232,7 @@ $(document).ready(function(){
 
 
 
-
-  $('.recordbutton').click(function(){
-
+  $('.recordbuttonbackup').click(function(){
     // use the '.enabled' boolean to make sure user enabled the mic (otherwise we'd record silence)
   if (state === 0 && mic.enabled) {
     masterVolume(0);
@@ -134,34 +248,28 @@ $(document).ready(function(){
       }
 
       else if(countdown === 5 ){
-        $('.recordbutton').text('RECORDING');
+        $('.recordbutton').text('RECORDING').addClass('red');
         recorder.record(soundFile);
         state++;
         clearInterval(recordCountDown);
       }
-
       else {
         $('.recordbutton').text(countdown);
       }
-
       countdown++;
-
     } // function myTimer
-
   }
 
   else if (state === 1) {
-    recorder.stop(); // stop recorder, and send the result to soundFile
-
+    recorder.stop();
     $(this).text('PLAY');
     state++;
   }
 
   else if (state === 2) {
-    // alert("about to play");
+
     masterVolume(1);
-    soundFile.play(); // play the result!
-    // saveSound(soundFile, 'mySound.wav'); // save file
+    soundFile.play();
     state = 0;
     $(this).text('REC');
   }

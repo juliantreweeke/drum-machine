@@ -1,9 +1,9 @@
 
 // recording variables
 
-var mic, recorder, soundFile;
+var mic, recorder, soundFile, soundFile2;
 var state = 0; // mousePress will increment from Record, to Stop, to Play
-
+var soundFiles = [];
 
 
 
@@ -65,6 +65,7 @@ function preload() {
     sounds[1] = loadSound(kicksamples[0]);
     sounds[2] = loadSound(snaresamples[0]);
     sounds[3] = loadSound('audio/hat.wav');
+
 }
 
 var kicks = [];
@@ -100,30 +101,42 @@ var basskey = [55,110,123,130,146,164,174,195];
 // recording stuff
 
 var recs = [];
+var recs2 = [];
 
 
   // generate each individual sound pad from object constructors
 
-  for (var i = 0, j=0 ; i < 16; i++, j+= 40 ) {
-    // 350
-    // top left index
-  // kicks.push(new HtmlSquare('320',j,i,'kick'));
-  kicks.push(new HtmlSquare('120',j,i,'kick'));
-  snares.push(new HtmlSquare('160',j,i,'snare'));
-  hats.push(new HtmlSquare('200',j,i,'hat'));
-  synths.push(new HtmlSynth('280',j,i,'synth'));
-  basses.push(new HtmlBass('340',j,i,'bass'));
-  recs.push(new RecordSquare('400',j,i,'rec'));
+  var createGrid = function(){
+
+    for (var i = 0, j=0 ; i < 16; i++, j+= 40 ) {
+      // top left index
+    kicks.push(new HtmlSquare('120',j,i,'kick'));
+    snares.push(new HtmlSquare('160',j,i,'snare'));
+    hats.push(new HtmlSquare('200',j,i,'hat'));
+    synths.push(new HtmlSynth('280',j,i,'synth'));
+    basses.push(new HtmlBass('340',j,i,'bass'));
+    recs.push(new RecordSquare('400',j,i,soundFile));
+    console.log('createGrid() - use SoundFile');
+
+    recs2.push(new RecordSquare('440',j,i,soundFile2));
+    }
+
+    for (var i = 0; i < kicks.length; i++) {
+      kicks[i].display();
+      snares[i].display();
+      hats[i].display();
+      synths[i].display();
+      basses[i].display();
+      recs[i].display();
+      recs2[i].display();
+    };
   }
 
-  for (var i = 0; i < kicks.length; i++) {
-    kicks[i].display();
-    snares[i].display();
-    hats[i].display();
-    synths[i].display();
-    basses[i].display();
-    recs[i].display();
-  };
+
+
+
+
+
 
   // var gui = createGui('Label');
   // gui.addGlobals('reverbDecay');
@@ -252,7 +265,6 @@ function setup() {
     filterHighFreq = 4000;
     // filterWidthHigh = 1;
 
-
     filterHighStart = new p5.HighPass();
     filterHighStart.freq = 500;
     filterHighStart.res = 1;
@@ -273,21 +285,28 @@ function setup() {
     // delay.process(wave, 56/bpm, .7, 4000);
     // delay.disconnect();
 
-    filter.process(sounds[1]);
-    filter.process(sounds[2]);
-    filter.process(sounds[3]);
-    filter.process(wave);
-    filter.process(bass);
+    // filter.process(sounds[1]);
+    // filter.process(sounds[2]);
+    // filter.process(sounds[3]);
+    // filter.process(wave);
+    // filter.process(bass);
+    //
+    // filterHighStart.process(sounds[1]);
+    // filterHighStart.process(sounds[2]);
+    // filterHighStart.process(sounds[3]);
+    // filterHighStart.process(wave);
+    // filterHighStart.process(bass);
+    // filterHighStart.disconnect();
+    // filterhigh.process(filterHighStart);
 
-    filterHighStart.process(sounds[1]);
-    filterHighStart.process(sounds[2]);
-    filterHighStart.process(sounds[3]);
-    filterHighStart.process(wave);
-    filterHighStart.process(bass);
-    filterHighStart.disconnect();
-    filterhigh.process(filterHighStart);
-
-
+    eqband1 = new p5.BandPass();
+    eqband1.freq(125);
+    eqband1.res(5);
+    eqband1.process(sounds[1]);
+    eqband1.process(sounds[2]);
+    eqband1.process(sounds[3]);
+    eqband1.process(wave);
+    eqband1.process(bass);
 
 
     // reverb :
@@ -298,50 +317,6 @@ function setup() {
     // filter.disconnect(); // on déconnecte le filtre de la sortie principale
     // on connecte le filtre à la reverb
     reverb.process(wave, reverbTime, reverbDecay); // 3 second reverbTime, decayRate of 2%
-    // On créer un panneau quicksettings pour pouvoir ajuster le bpm, les paramètres du filtres et de la reverb
-    // on utilisera des fonction de callback anonymes pour mettre à jour les valeurs
-    // settings = QuickSettings.create(windowWidth / 2, 5, "Contols");
-    // settings.addRange("BPM", 60, 180, bpm, 1, function (val) {
-    //     bpm = val
-    //     myPart.setBPM(bpm)
-    // });
-    // settings.addRange("Filter Frequency", 20, 10000, filterFreq, 1, function (val) {
-    //     filterFreq = val
-    //     filter.set(filterFreq, filterWidth)
-    // });
-    // settings.addRange("Filter Width", 1, 50, filterWidth, 1, function (val) {
-    //     filterWidth = val
-    //     filter.set(filterFreq, filterWidth)
-    // });
-    // settings.addRange("Reverb Time", 0, 10, reverbTime, 1, function (val) {
-    //     reverbTime = val
-    //     reverb.process(filter, reverbTime, reverbDecay, false)
-    // });
-    // settings.addRange("Reverb Decay", 0, 100, reverbDecay, 1, function (val) {
-    //     reverbDecay = val
-    //     reverb.process(filter, reverbTime, reverbDecay, false)
-    // });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // // reverbSize = controller.reverbSize;
     // reverbSize = 50;
     // reverbDecay = 100;
@@ -369,8 +344,6 @@ function setup() {
     // fft3.setInput(sounds[2]);
     fft4 = new p5.FFT();
     fft4.setInput(reverb);
-
-
 
     // Patch the input to an volume analyzer
     // synth analysis
@@ -403,6 +376,13 @@ function setup() {
 
     // create an empty sound file that we will use to playback the recording
     soundFile = new p5.SoundFile();
+    soundFile2 =new p5.SoundFile();
+    console.log('p5:setup() - create SoundFile');
+
+    createGrid();
+
+    // soundFiles.push(soundFile);
+    // soundFiles.push(soundFile2);
 
 
 

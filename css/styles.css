@@ -5,7 +5,9 @@
 
 
 
-
+.red {
+  color:red;
+}
 
 /*flex box layout*/
 
@@ -233,12 +235,16 @@ top:120px;
 top:160px;
 }
 
-.synthtoggle {
+.hattoggle {
+top:200px;
+}
+
+.synthtoggle,.octave, .octave2 {
 top:280px;
 /*background-image: url(../images/sine.png);*/
 }
 
-.basstoggle {
+.basstoggle, .bassoctave, .bassoctave2 {
 top:340px;
 /*background-image: url(../images/sine.png);*/
 }
@@ -246,13 +252,16 @@ top:340px;
 .recordbutton {
 left:230px;
 top:400px;
+}
 
-
+.recordbutton2 {
+left:230px;
+top:440px;
 }
 
 .tempobuttons {
   left:230px;
-  top:460px;
+  top:480px;
   position:absolute;
   background-color: black;
   opacity: 0.8;
@@ -302,6 +311,19 @@ left:-120px;
   left:640px;
 }
 
+.octave,.bassoctave {
+  left:640px;
+  width:40px;
+}
+
+.octave2,.bassoctave2 {
+  left:680px;
+  width:40px;
+}
+
+
+
+
 .fadebutton {
   top:20px;
   left:10px;
@@ -311,6 +333,12 @@ left:-120px;
 .eqbutton {
   top:20px;
   left:100px;
+  border: none;
+}
+
+.clearbutton {
+  top:20px;
+  left:200px;
   border: none;
 }
 
