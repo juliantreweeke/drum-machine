@@ -72,40 +72,56 @@ $(document).ready(function(){
       }
   })
 
-  var fadecounter = false;
-  $('.fadebutton').click(function(){
 
-    // if(fadecounter){
-    //   $('#main').css("opacity","1")
-    //   fadecounter = false;
-    // } else {
-    //   $('#main').css("opacity","0")
-    //   fadecounter = true;
-    // }
+  $('.fadebutton').click(function(){
+    $('#main').toggleClass( "noopacity");
+  });
+
+
+
+  $('.eqbutton').click(function(){
 
 
     $('#main').toggleClass( "noopacity");
 
+    if (eq === false){
+      // turn on eq draw
+      eq = true;
+
+
+
+
+
+    } else {
+      // turn off eq draw
+      eq = false;
+      filter.freq(4000);
+
+
+
+
+
+    }
+
+
 
   });
+
+
+
+
+
+
+
+
+
+
 
   $('.recordbutton').click(function(){
 
     // use the '.enabled' boolean to make sure user enabled the mic (otherwise we'd record silence)
   if (state === 0 && mic.enabled) {
     masterVolume(0);
-
-    // setDeceleratingTimeout(function(){ alert('hi'); }, 10, 10);
-
-    // $(this).text('1').delay( 800 );
-    // $(this).text('2').delay( 1800 );
-
-    // $( "#foo" ).slideUp( 300 )
-
-    // $(this).text('2');
-    // $(this).text('2');
-    // $(this).text('3');
-    // $(this).text('GO!');
 
     var recordCountDown = setInterval(function(){ myTimer() }, 1000);
     var countdown = 1;
@@ -122,8 +138,6 @@ $(document).ready(function(){
         recorder.record(soundFile);
         state++;
         clearInterval(recordCountDown);
-
-
       }
 
       else {
@@ -134,22 +148,6 @@ $(document).ready(function(){
 
     } // function myTimer
 
-
-
-
-
-
-
-
-
-    // Tell recorder to record to a p5.SoundFile which we will use for playback
-
-
-
-    // background(255,0,0);
-    // text('Recording now! Click to stop.', 20, 20);
-
-    // alert("about to record");
   }
 
   else if (state === 1) {

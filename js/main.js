@@ -7,7 +7,8 @@ var state = 0; // mousePress will increment from Record, to Stop, to Play
 
 
 
-
+var eq = false;
+// var filtereq = false
 
 var reverb;
 var reverbSize;
@@ -16,7 +17,8 @@ var reverbDecay;
 var settings;
 var rSlider;
 var controller = {
-  Filter: 4000,
+  Filter: 300,
+  FilterHigh:10000,
   ReverbTime: 100,
   ReverbDecay:1,
 };
@@ -176,7 +178,7 @@ function setup() {
     // dat gui stuff
 
     var gui = new dat.GUI();
-    gui.add(controller, 'Filter', 40, 4000).onFinishChange(function(val){
+    gui.add(controller, 'Filter', 5, 300).onFinishChange(function(val){
       // update Revervb
       // reverb.set(2, parseInt(controller.reverbSize));
       // reverb.process(wave, val, 2);
@@ -184,6 +186,21 @@ function setup() {
       filter.freq(val);
 
     });
+
+    gui.add(controller, 'FilterHigh', 300, 10000).onFinishChange(function(val){
+      // update Revervb
+      // reverb.set(2, parseInt(controller.reverbSize));
+      // reverb.process(wave, val, 2);
+
+      filterhigh.freq(val);
+
+    });
+
+
+
+
+
+
     gui.add(controller, 'ReverbTime', 1, 99).onFinishChange(function(val){
       // update Revervb
       // reverb.set(2, parseInt(controller.reverbSize));
@@ -223,8 +240,8 @@ function setup() {
     // });
 
 
-    filterFreq = 4000;
-    filterWidth = 1;
+    filterFreq = 300;
+    filterWidth = 5;
     //
     filter = new p5.LowPass(); // création d'un filtre de type lowpass
     // on déconnecte nos sources de la sortie principale
@@ -232,6 +249,18 @@ function setup() {
   // give the filter a narrow band (lower res = wider bandpass)
     filter.res(filterWidth);
 
+    filterHighFreq = 4000;
+    // filterWidthHigh = 1;
+
+
+    filterHighStart = new p5.HighPass();
+    filterHighStart.freq = 500;
+    filterHighStart.res = 1;
+
+
+    filterhigh = new p5.LowPass();
+    filterhigh.freq(4000);
+    filter.res = 5;
 
     sounds[1].disconnect();
     sounds[2].disconnect();
@@ -241,14 +270,26 @@ function setup() {
     wave.disconnect();
     bass.disconnect();
 
-    delay.process(wave, 56/bpm, .7, 4000);
+    // delay.process(wave, 56/bpm, .7, 4000);
     // delay.disconnect();
 
     filter.process(sounds[1]);
     filter.process(sounds[2]);
     filter.process(sounds[3]);
-    // filter.process(wave,delay);
+    filter.process(wave);
     filter.process(bass);
+
+    filterHighStart.process(sounds[1]);
+    filterHighStart.process(sounds[2]);
+    filterHighStart.process(sounds[3]);
+    filterHighStart.process(wave);
+    filterHighStart.process(bass);
+    filterHighStart.disconnect();
+    filterhigh.process(filterHighStart);
+
+
+
+
     // reverb :
 
     reverbTime = 1;
@@ -372,19 +413,19 @@ function setup() {
 } // setup
 
 
-function mousePressed() {
-
-  fill(200,0,0);
-  ellipse(mouseX,mouseY,200,200)
-
-  // Check if mouse is inside the circle
-  var d = dist(mouseX, mouseY, 360, 200);
-  if (d < 100) {
-
-    // Pick new random color values
-
-  }
-}
+// function mousePressed() {
+//
+//   fill(200,0,0);
+//   ellipse(mouseX,mouseY,200,200)
+//
+//   // Check if mouse is inside the circle
+//   var d = dist(mouseX, mouseY, 360, 200);
+//   if (d < 100) {
+//
+//     // Pick new random color values
+//
+//   }
+// }
 
 
 
@@ -400,10 +441,6 @@ function draw() {
 
   var velocityScale = map(mouseY, 0, windowHeight, -2, 2) * 100;
   var sizeScale = map(mouseX, 0, windowWidth, 0.1, 10 );
-
-
-  // console.log(velocityScale);
-
 
   // Draw an ellipse with size based on volume
 
@@ -439,11 +476,24 @@ function draw() {
 
   var snareSpectrum = fftsnare.analyze();
 
-  for (var i = 0; i < 20; i++){
-    stroke(random(250));
+  for (var i = 0; i < snareSpectrum.length; i++){
+    noStroke();
     fill(0,0,random(250));
-    ellipse(random(1000), 200 , 50, snareSpectrum[i] / 2 );
+    triangle(random(snareSpectrum[i]),random(snareSpectrum[i]),random(snareSpectrum[i]),random(snareSpectrum[i]),random(snareSpectrum[i]),random(snareSpectrum[i]));
+    // ellipse(random(windowWidth), windowHeight , snareSpectrum[i], snareSpectrum[i],snareSpectrum[i]);
+    // line(random(windowWidth), windowHeight , 50, snareSpectrum[i] / 2 );
   }
+
+  // var snareSpectrum = fftsnare.analyze();
+  //
+  // for (var i = 0; i < snareSpectrum.length; i++){
+  //   // noStroke();
+  //   stroke(0,0,255);
+  //   fill(0,0,random(250));
+  //   line(random(windowWidth), windowHeight , snareSpectrum[i], snareSpectrum[i]);
+  //   // line(random(windowWidth), windowHeight , 50, snareSpectrum[i] / 2 );
+  // }
+
 
 
 
@@ -458,28 +508,80 @@ function draw() {
 
   // draw filtered spectrum
 
+  if( drawn.length > 1 && eq === true ){
+    console.log('drawing');
+    for (var i = 0; i < drawn.length; i++) {
+      var draw = drawn[i]
+      fill(0,0,250);
+      ellipse(draw.x, draw.y, random(draw.size), random(draw.size));
+    }
+
+  };
+
+
+
+
+
 
   if( mouseIsPressed ){
 
 
-    fill(0,0,250);
-    ellipse(mouseX, mouseY, 40, 40);
 
-    drawn.push({x: mouseX, y: mouseY, size: 40,col:"blue" });
-    console.log(mouseY);
-    if(mouseY > 100){
-      mouseY += 3000;
+      if (eq === false ){
+
+
+
+
+        // fill(0,0,250);
+        // ellipse(mouseX, mouseY, 40, 40);
+        // drawn.push({x: mouseX, y: mouseY, size: 40,col:"white" });
+        //
+        // for (var i = 0; i < drawn.length; i++) {
+        //   var draw = drawn[i]
+        //   fill(0,0,random(250));
+        //   ellipse(draw.x, draw.y, random(draw.size), random(draw.size));
+        // }
+
+      } else {
+
+        // console.log(eq);
+
+        // turn on filter
+        // make drawing turn black
+
+        fill(0,0,0);
+
+        // ellipse(mouseX, mouseY, 40, 40);
+        // visuals
+        drawn.push({x: mouseX, y: mouseY, size: 40,col:"white" });
+
+        // for (var i = 0; i < drawn.length; i++) {
+        //   var draw = drawn[i]
+        //   fill(0,0,random(250));
+        //   ellipse(draw.x, draw.y, random(draw.size), random(draw.size));
+        // }
+
+        // filter
+        // reverse the mouse Y pos number
+        var reverseMouse = Math.abs(mouseY - 600) ;
+        console.log("rev ",reverseMouse);
+        filter.freq(reverseMouse);
+
+
+
+      // console.log(mouseY);
+      // if(mouseY > 100){
+      //   mouseY += 3000;
+      // }
+
+      // console.log(mouseY, "mouse Y");
+      // console.log(mouseX, "mouse X");
     }
-    filter.freq(mouseY + 100);
-    // console.log(mouseY, "mouse Y");
-    // console.log(mouseX, "mouse X");
+
   }
 
-  for (var i = 0; i < drawn.length; i++) {
-    var draw = drawn[i]
-      fill(0,0,random(250));
-      ellipse(draw.x, draw.y, random(draw.size), random(draw.size));
-  }
+
+
 
 } // function draw
 
