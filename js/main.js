@@ -335,6 +335,9 @@ function setup() {
     analyzer = new p5.Amplitude();
     analyzer.setInput(wave);
 
+    bassanalyzer = new p5.FFT();
+    bassanalyzer.setInput(bass);
+
     kickanalyzer = new p5.Amplitude();
 
     fftkick = new p5.FFT();
@@ -342,6 +345,8 @@ function setup() {
 
     fftsnare = new p5.FFT();
     fftsnare.setInput(sounds[2]);
+
+
 
     // ffthat = new p5.Amplitude();
     // ffthat.setInput(sounds[3]);
@@ -370,6 +375,8 @@ function setup() {
     soundFile2 =new p5.SoundFile();
     soundFile3 =new p5.SoundFile();
 
+    fftrec1 = new p5.FFT();
+    fftrec1.setInput(soundFile);
 
     createGrid();
 
@@ -403,13 +410,35 @@ function draw() {
 
   wavecolor = waveshape.analyze();
 
-
-
   for (var i = 0; i < wavecolor.length; i++) {
-    stroke(wavecolor[i]);
+    noStroke();
     fill(0,0,wavecolor[i]);
-    ellipse(random(windowWidth), random(windowHeight), wavecolor[i] + velocityScale,wavecolor[i]);
+    rect(random(windowWidth), random(mouseX), random(0,wavecolor[i]) + velocityScale,random(0,100));
   }
+
+    var bassSpectrum = bassanalyzer.analyze();
+
+    for (var i = 0; i < 10 ; i++) {
+      stroke(0,0,100);
+      // fill(random(250));
+
+      fill(0,0,250);
+      rect(random(bassSpectrum) + 800, bassSpectrum[i] - sizeScale, random(0,bassSpectrum[i]) + velocityScale,random(0,100));
+    }
+
+    var recSpectrum = fftrec1.analyze();
+
+    for (var i = 0; i < 10 ; i++) {
+      stroke(0,0,100);
+      // fill(random(250));
+
+      fill(random(250));
+      ellipse(random(recSpectrum) + 100, recSpectrum[i] + sizeScale, random(0,recSpectrum[i]) + velocityScale);
+    }
+
+
+
+
 
   var spectrum = fftkick.analyze();
   // console.log(spectrum);
@@ -418,11 +447,24 @@ function draw() {
   for (var i = 0; i < spectrum.length / 2; i++){
     noStroke();
     fill(0,0,spectrum[i]);
-    ellipse(random(windowWidth) + velocityScale, windowHeight, spectrum[i],spectrum[i] * 100);
+    ellipse(random(spectrum[i]) + velocityScale, random(500,1000), spectrum[i] * 100,spectrum[i]);
     // var x = map(i, 0, spectrum.length, 0, width);
     // var h = -height + map(spectrum[i], 0, 255, height, 0);
     // rect(x, height, width / spectrum.length, h )
   }
+
+
+  // kick effect filling screen
+  // for (var i = 0; i < spectrum.length / 2; i++){
+  //   noStroke();
+  //   fill(0,0,spectrum[i]);
+  //   ellipse(random(windowWidth) + velocityScale, windowHeight, spectrum[i],spectrum[i] * 100);
+  // }
+
+
+
+
+
 
   var snareSpectrum = fftsnare.analyze();
 
