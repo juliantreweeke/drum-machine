@@ -28,7 +28,6 @@ function HtmlSquare(top,left,i,name) {
 
     if (self.active){
       self.active = false;
-      // $('#' + self.name ).addClass("off");
 
       $('#' + self.name ).css({
       border:'blue 1px solid'
@@ -38,11 +37,11 @@ function HtmlSquare(top,left,i,name) {
 
       self.active = true;
 
-      // $('#' + self.name ).addClass("on");
+
 
       $('#' + self.name ).css({
         border:'lightblue 1px solid'
-      // backgroundColor: 'blue'
+      
       });
 
     }

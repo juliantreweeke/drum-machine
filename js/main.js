@@ -102,6 +102,7 @@ var basskey = [55,110,123,130,146,164,174,195];
 
 var recs = [];
 var recs2 = [];
+var recs3 = [];
 
 
   // generate each individual sound pad from object constructors
@@ -115,10 +116,9 @@ var recs2 = [];
     hats.push(new HtmlSquare('200',j,i,'hat'));
     synths.push(new HtmlSynth('280',j,i,'synth'));
     basses.push(new HtmlBass('340',j,i,'bass'));
-    recs.push(new RecordSquare('400',j,i,soundFile));
-    console.log('createGrid() - use SoundFile');
-
-    recs2.push(new RecordSquare('440',j,i,soundFile2));
+    recs.push(new RecordSquare('400',j,i,'rec1',soundFile));
+    recs2.push(new RecordSquare('440',j,i,'rec2',soundFile2));
+    recs3.push(new RecordSquare('480',j,i,'rec3',soundFile3));
     }
 
     for (var i = 0; i < kicks.length; i++) {
@@ -129,6 +129,7 @@ var recs2 = [];
       basses[i].display();
       recs[i].display();
       recs2[i].display();
+      recs3[i].display();
     };
   }
 
@@ -237,22 +238,6 @@ function setup() {
 
 
 
-    // p5.gui stuff
-
-
-    // quick settings stuff
-
-    // settings = QuickSettings.create(windowWidth / 5, 10, "Controls");
-    // settings.addRange("Reverb Time", 0, 100, reverbSize, 1, function (val) {
-    //     reverbTime = val
-    //     reverb.process(filter, reverbSize, reverbDecay, false)
-    // });
-    // settings.addRange("Reverb Decay", 0, 100, reverbDecay, 1, function (val) {
-    //     reverbDecay = val
-    //     reverb.process(filter, reverbSize, reverbDecay, false)
-    // });
-
-
     filterFreq = 300;
     filterWidth = 5;
     //
@@ -274,13 +259,13 @@ function setup() {
     filterhigh.freq(4000);
     filter.res = 5;
 
-    sounds[1].disconnect();
-    sounds[2].disconnect();
-    sounds[3].disconnect();
-    delay = new p5.Delay();
-
-    wave.disconnect();
-    bass.disconnect();
+    // sounds[1].disconnect();
+    // sounds[2].disconnect();
+    // sounds[3].disconnect();
+    // delay = new p5.Delay();
+    //
+    // wave.disconnect();
+    // bass.disconnect();
 
     // delay.process(wave, 56/bpm, .7, 4000);
     // delay.disconnect();
@@ -299,14 +284,14 @@ function setup() {
     // filterHighStart.disconnect();
     // filterhigh.process(filterHighStart);
 
-    eqband1 = new p5.BandPass();
-    eqband1.freq(125);
-    eqband1.res(5);
-    eqband1.process(sounds[1]);
-    eqband1.process(sounds[2]);
-    eqband1.process(sounds[3]);
-    eqband1.process(wave);
-    eqband1.process(bass);
+    // eqband1 = new p5.BandPass();
+    // eqband1.freq(125);
+    // eqband1.res(5);
+    // eqband1.process(sounds[1]);
+    // eqband1.process(sounds[2]);
+    // eqband1.process(sounds[3]);
+    // eqband1.process(wave);
+    // eqband1.process(bass);
 
 
     // reverb :
@@ -358,6 +343,12 @@ function setup() {
     fftsnare = new p5.FFT();
     fftsnare.setInput(sounds[2]);
 
+    // ffthat = new p5.Amplitude();
+    // ffthat.setInput(sounds[3]);
+
+    // ffthat = new p5.FFT();
+    // ffthat.setInput(sounds[3]);
+
 
 
     // recording stuff
@@ -377,7 +368,8 @@ function setup() {
     // create an empty sound file that we will use to playback the recording
     soundFile = new p5.SoundFile();
     soundFile2 =new p5.SoundFile();
-    console.log('p5:setup() - create SoundFile');
+    soundFile3 =new p5.SoundFile();
+
 
     createGrid();
 
@@ -391,28 +383,6 @@ function setup() {
 
 
 } // setup
-
-
-// function mousePressed() {
-//
-//   fill(200,0,0);
-//   ellipse(mouseX,mouseY,200,200)
-//
-//   // Check if mouse is inside the circle
-//   var d = dist(mouseX, mouseY, 360, 200);
-//   if (d < 100) {
-//
-//     // Pick new random color values
-//
-//   }
-// }
-
-
-
-
-
-
-
 
 
 function draw() {
@@ -463,6 +433,25 @@ function draw() {
     // ellipse(random(windowWidth), windowHeight , snareSpectrum[i], snareSpectrum[i],snareSpectrum[i]);
     // line(random(windowWidth), windowHeight , 50, snareSpectrum[i] / 2 );
   }
+
+  // var hatSpectrum = ffthat.analyze();
+  //
+  //
+  // for (var i = 0; i < 10; i++){
+  //
+  //   noStroke();
+  //   fill(random(250));
+  //   triangle(hatSpectrum[i],random(50),random(hatSpectrum[i]),random(hatSpectrum[i]),random(hatSpectrum[i]),random(hatSpectrum[i]));
+  //
+  // }
+
+
+
+
+
+
+
+
 
   // var snareSpectrum = fftsnare.analyze();
   //
@@ -679,6 +668,16 @@ function step() {
 
     if (recs[beat].active === true) {
         soundFile.play();
+        // $('#' + 'hat' + beat ).effect( "bounce", { times: 6 }, "fast" );
+    }
+
+    if (recs2[beat].active === true) {
+        soundFile2.play();
+        // $('#' + 'hat' + beat ).effect( "bounce", { times: 6 }, "fast" );
+    }
+
+    if (recs3[beat].active === true) {
+        soundFile3.play();
         // $('#' + 'hat' + beat ).effect( "bounce", { times: 6 }, "fast" );
     }
 

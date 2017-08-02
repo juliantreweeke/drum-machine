@@ -246,22 +246,27 @@ top:280px;
 
 .basstoggle, .bassoctave, .bassoctave2 {
 top:340px;
-/*background-image: url(../images/sine.png);*/
 }
 
-.recordbutton {
+.recordbutton,.recordbutton2,.recordbutton3 {
 left:230px;
+}
+.recordbutton {
 top:400px;
 }
 
 .recordbutton2 {
-left:230px;
 top:440px;
 }
 
+.recordbutton3 {
+top:480px;
+}
+
+
 .tempobuttons {
   left:230px;
-  top:480px;
+  top:520px;
   position:absolute;
   background-color: black;
   opacity: 0.8;

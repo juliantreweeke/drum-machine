@@ -1,13 +1,11 @@
 
 var $square;
 
-function RecordSquare(top,left,i,filename) {
+function RecordSquare(top,left,i,name,filename) {
   var self = this;
   // debugger;
   console.log('soundFile (filename): ', filename);
 
-  this.col = 'rgb(250,250,250)';
-  // this.id = i;
   this.name = name + i.toString();
   this.active = false;
 
@@ -26,7 +24,8 @@ function RecordSquare(top,left,i,filename) {
   }
 
 
-  this.clicked = function() {
+  self.clicked = function() {
+
 
     if (filename.buffer === null){
 

@@ -177,6 +177,7 @@ $(document).ready(function(){
   // })
 
   var recordsound = function(filename,node){
+    debugger;
 
     if (state === 0 && mic.enabled) {
       masterVolume(0);
@@ -198,7 +199,7 @@ $(document).ready(function(){
           clearInterval(recordCountDown);
         }
         else {
-          $('.recordbutton').text(countdown);
+          $(node).text(countdown);
         }
         countdown++;
       } // function myTimer
@@ -216,14 +217,23 @@ $(document).ready(function(){
       filename.play();
       state = 0;
       $(node).text('REC');
+
+
     }
 
-    });
+  };
 
 
     $('.recordbutton').click(function(){
-      recordsound(,'.recordbutton')
+      recordsound(soundFile,'.recordbutton')
+    });
 
+    $('.recordbutton2').click(function(){
+      recordsound(soundFile2,'.recordbutton2')
+    });
+
+    $('.recordbutton3').click(function(){
+      recordsound(soundFile3,'.recordbutton3')
     });
 
 
