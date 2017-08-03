@@ -58,6 +58,7 @@ $(document).ready(function(){
   $('.hattoggle').click(function(){
     hatcounter++
     drumToggle(hatcounter,hatsamples,3,hatname,this);
+    // ffthat.setInput(sounds[3]);
   });
 
   $('.synthtoggle').click(function(){
@@ -251,9 +252,7 @@ $(document).ready(function(){
       recordsound(soundFile3,'.recordbutton3')
     });
 
-    var recordAll = function(){
 
-    }
 
     var recording = false;
     $('.masterbutton').click(function(){
