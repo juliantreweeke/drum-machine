@@ -117,6 +117,7 @@ function setup() {
   //////////////////////////////////////////////////////////////////////////////////////////////
   // dat gui stuff
   var gui = new dat.GUI( { autoPlace: true } );
+  gui.closed = true;
   gui.domElement.id = 'gui';
 
   gui.add(controller, 'filter', 1, 10000).onFinishChange(function(val){
@@ -221,8 +222,6 @@ function setup() {
     recorder2.setInput(filter);
 
     createGrid();
-
-
 
 
 

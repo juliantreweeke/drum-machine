@@ -7,9 +7,9 @@ $(document).ready(function(){
   var basscounter = 0;
   var playing = true;
 
-  $(document).on('keypress', function (e) {
-
-    console.log(`key: "${ e.key }" (${ e.keyCode })`);
+  ////////////////////////////////////////////////////////////////////////////////
+  // KEYBOARD EVENT HANDLERS
+  $(document).on('keydown', function (e) {
 
     if( e.key === ' '){
         $( '.playbutton' ).toggleClass('pauseimg');
@@ -23,10 +23,19 @@ $(document).ready(function(){
     } else if( !isNaN(e.key) ){
       console.log('Number', e.key);
       beatJump = parseInt(e.key);
+    } else if(e.which === 38){
+      tempoup();
+    } else if(e.which === 40){
+      tempodown();
+    } else if(e.which === 37){
+      beatJump = beat - 2;
+    } else if(e.which === 39){
+      beatJump = beat + 1;
     }
 
   });
 
+  ////////////////////////////////////////////////////////////////////////////////
 
   $('.kicktoggle').click(function(){
       kickcounter++;
@@ -67,16 +76,31 @@ $(document).ready(function(){
 
 
   $('.tempoup').click(function(){
-      bpm++;
-      myPart.setBPM(bpm);
-      $('.tempo').text(bpm.toString());
+    tempoup();
   })
 
   $('.tempodown').click(function(){
-      bpm--;
-      myPart.setBPM(bpm);
-      $('.tempo').text(bpm.toString());
+    tempodown();
   })
+
+  var tempoup = function(){
+    bpm++;
+    myPart.setBPM(bpm);
+    $('.tempo').text(bpm.toString());
+  }
+
+  var tempodown = function(){
+    bpm--;
+    myPart.setBPM(bpm);
+    $('.tempo').text(bpm.toString());
+  }
+
+
+
+
+
+
+
 
   // double the values in the synthskey array to change octaves
   $('.octave').click(function(){
@@ -188,19 +212,23 @@ $(document).ready(function(){
           $(node).text("GO!");
         }
         else if(countdown === 5 ){
-          $(node).text('RECORDING').addClass('red');
+          $(node).text('RECORDING');
+          $(node).css('color','red');
           recorder.record(filename);
           state++;
           clearInterval(recordCountDown);
         }
         else {
+
           $(node).text(countdown);
+
         }
         countdown++;
       } // function myTimer
     }
     else if (state === 1) {
       recorder.stop();
+      $(node).css('color','rgb(0,156,255)');
       $(node).text('PLAY');
       state++;
     }

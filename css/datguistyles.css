@@ -2,8 +2,6 @@
        color: black;
        font: normal 25px/1 "VT323", Helvetica, sans-serif;
        color:rgb(0, 156, 255);
-       /*text-align: center;*/
-       -o-text-overflow: ellipsis;
        text-overflow: ellipsis;
        text-shadow: 5px 5px 0 rgba(1, 19, 144, 1) ;
         font-size: 15px;
@@ -44,11 +42,6 @@
        outline-width: 1.5px
 }
 .dg .closed li.title {
-       /*background: -moz-linear-gradient(center top, #ededed 34%, #dfdfdf 71%);*/
-       /*background: -ms-linear-gradient(top, #ededed 34%, #dfdfdf 71%);*/
-       /*background: -webkit-gradient(linear, left top, left bottom, color-stop(34%, #ededed),*/
-                    color-stop(71%, #dfdfdf));
-       /*background-color: #ededed;*/
        border: 1px solid rgb(0, 156, 255);
        border-radius: 2px;
        box-shadow: inset 1px 0 9px 0 rgb(0, 156, 255);
@@ -61,20 +54,11 @@
        border-right: 1px solid silver
 }
 .dg .cr.function:hover {
+       border-bottom: 1px solid silver;
+       border-right: 1px solid silver
+}
 
-       border-bottom: 1px solid silver;
-       border-right: 1px solid silver
-}
-.dg li.cr {
-       /*background: #fafafa;*/
-       border-bottom: 1px solid silver;
-       border-right: 1px solid silver
-}
-.dg li.cr:hover {
-       /*background: white;*/
-       border-bottom: 1px solid silver;
-       border-right: 1px solid silver
-}
+
 .dg li.title, .dg closed {
        border: 1px solid rgb(0, 156, 255);
        border-radius: 2px;
@@ -86,10 +70,9 @@
        outline-width: 1.5px
 }
 .dg.main .close-button {
-       /*background: -moz-linear-gradient(center top, #ededed 34%, #dfdfdf 71%);*/
+
        background: black;
        border-radius: 2px;
-       box-shadow: inset 1px 0 9px 0 white;
        color: rgb(0, 156, 255);
        height: 27px;
        line-height: 27px;
@@ -102,3 +85,5 @@
 }
 
 .dg { z-index:5 !important};
+
+.dg { top:50px !important};
