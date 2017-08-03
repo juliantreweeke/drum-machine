@@ -52,20 +52,19 @@ var gui;
 
 // drum stuff
 
-var kicksamples = ['audio/defaultkick.wav','audio/dnbkick.wav','audio/druidkick.wav','audio/punchykick.wav'];
-var kickname = ['KICK','DNB KICK','DRUID KICK','PUNCHY'];
+var kicksamples = ['audio/defaultkick.mp3','audio/dnbkick.mp3','audio/druidkick.mp3','audio/punchykick.mp3','audio/WDI22kick.mp3'];
+var kickname = ['KICK','DNB KICK','DRUID KICK','PUNCHY','WDI22 KICK'];
 
-var snaresamples = ['audio/snare.wav','audio/resasnare.wav','audio/dnbsnare.wav','audio/tightsnare.wav'];
-var snarename = ['SNARE','RESA SNR','DNB SNR','TIGHT SNR'];
+var snaresamples = ['audio/snare.mp3','audio/resasnare.mp3','audio/dnbsnare.mp3','audio/tightsnare.mp3','audio/ninjasnare.mp3','audio/WDI22clap.mp3'];
+var snarename = ['SNARE','RESA SNR','DNB SNR','TIGHT SNR','NINJA SNR','WDI22 CLP'];
 
-
-
+var hatsamples = ['audio/hat.mp3','audio/hat2.mp3','audio/hat3.mp3','audio/cowbell.mp3'];
+var hatname = ['HAT','HAT 2','HAT 3','COWBELL'];
 
 function preload() {
     sounds[1] = loadSound(kicksamples[0]);
     sounds[2] = loadSound(snaresamples[0]);
-    sounds[3] = loadSound('audio/hat.wav');
-
+    sounds[3] = loadSound(hatsamples[0]);
 }
 
 var kicks = [];

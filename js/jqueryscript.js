@@ -2,16 +2,11 @@
 
 $(document).ready(function(){
 
-  // $(document).on('click', '.pad', function(){
-  // });
-
-
   var kickcounter = 0;
   var snarecounter = 0;
+  var hatcounter = 0;
   var synthcounter = 0;
   var basscounter = 0;
-  console.log(kicksamples.length);
-
 
   $('.kicktoggle').click(function(){
       kickcounter++;
@@ -21,13 +16,44 @@ $(document).ready(function(){
       $(this).text(kickname[kickcounter]);
   })
 
+  // $('.snaretoggle').click(function(){
+  //     snarecounter++;
+  //     snarecounter = snarecounter % snaresamples.length;
+  //     sounds[2] = loadSound(snaresamples[snarecounter]);
+  //     fftsnare.setInput(sounds[2]);
+  //     $(this).text(snarename[snarecounter]);
+  // })
+
   $('.snaretoggle').click(function(){
       snarecounter++;
-      snarecounter = snarecounter % snaresamples.length;
-      sounds[2] = loadSound(snaresamples[snarecounter]);
+      drumToggle(snarecounter,snaresamples,2,snarename,this);
       fftsnare.setInput(sounds[2]);
-      $(this).text(snarename[snarecounter]);
   })
+
+  // $('.hattoggle').click(function(){
+  //     hatcounter++;
+  //     hatcounter = hatcounter % hatsamples.length;
+  //     sounds[3] = loadSound(hatsamples[hatcounter]);
+  //     $(this).text(hatname[hatcounter]);
+  // })
+
+  var drumToggle = function(counter,array,num,name,target){
+    counter = counter % array.length;
+    sounds[num] = loadSound(array[counter]);
+    $(target).text(name[counter]);
+  }
+
+  $('.hattoggle').click(function(){
+    hatcounter++
+    drumToggle(hatcounter,hatsamples,3,hatname,this);
+  });
+
+
+
+
+
+
+
 
   $('.synthtoggle').click(function(){
       synthcounter++;
