@@ -127,11 +127,11 @@ $(document).ready(function(){
 
 ////////////////////////////
 
-  $('.eqbutton').click(function(){
-
-    $('#main').toggleClass( "noopacity");
-
-  });
+  // $('.eqbutton').click(function(){
+  //     fxdraw = true;
+  //   $('#main').toggleClass( "noopacity");
+  //
+  // });
 
   var playing = true;
   $('.playbutton').click(function(){
@@ -147,22 +147,26 @@ $(document).ready(function(){
   });
 
 
-  // $('.eqbutton').click(function(){
-  //   $('#main').toggleClass( "noopacity");
-  //   if (eq === false){
-  //     // turn on eq draw
-  //     eq = true;
-  //   } else {
-  //     // turn off eq draw
-  //     eq = false;
-  //     filter.freq(4000);
-  //   }
-  // });
+  $('.eqbutton').click(function(){
+    $('#main').toggleClass( "noopacity");
+
+    if (fxdraw === false){
+      console.log('false');
+      // turn on eq draw
+      fxdraw = true;
+      alert(fxdraw);
+    } else {
+      // turn off eq draw
+      console.log('true');
+      fxdraw = false;
+      filter.freq(12000);
+    }
+  });
 
 
 
   var recordsound = function(filename,node){
-    debugger;
+
 
     if (state === 0 && mic.enabled) {
       masterVolume(0);

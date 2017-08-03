@@ -5,20 +5,20 @@ var mic, recorder, soundFile, soundFile2;
 var state = 0; // mousePress will increment from Record, to Stop, to Play
 var soundFiles = [];
 
-var eq = false;
+var fxdraw = false;
 // var filtereq = false
 
-var reverb;
-var reverbSize;
-
-var reverbDecay;
+// var reverb;
+// var reverbSize;
 var settings;
-var rSlider;
+// var rSlider;
+
 var controller = {
-  Filter: 300,
-  FilterHigh:10000,
-  ReverbTime: 100,
-  ReverbDecay:1,
+  filter:12000,
+  synthdelay:100,
+  delaytime:100,
+  reverbTime: 100,
+  reverbDecay:1
 };
 
 var drawn = [];
@@ -30,14 +30,13 @@ var notes = [];
 
 var sounds = [];
 
-// sequenceur
-var myPart; // un metronome
+var myPart; //
 var beat = 0; //
 var bpm = 90; //
-// effets
-var filter, filterFreq, filterWidth //
-var reverb, reverbTime, reverbDecay //
-var settings //
+
+var filter, filterFreq, filterWidth; //
+var reverb, reverbTime, reverbDecay; //
+var settings; //
 var fft1, fft2, fft3, fft4;
 
 var counter = 0;
@@ -138,17 +137,8 @@ function setup() {
 
   slider = document.getElementById("slider");
 
-
-
-
-
-
-
-  filter = new p5.BandPass();
+  // filter = new p5.BandPass();
   noise = new p5.Noise();
-  // disconnect unfiltered noise,
-  // and connect to filter
-  // fft = new p5.FFT();
 
   //Sequencer stuff
 
@@ -166,114 +156,76 @@ function setup() {
     // ---------------------------------------------------
     // dat gui stuff
 
-    var gui = new dat.GUI();
-    gui.add(controller, 'Filter', 5, 300).onFinishChange(function(val){
-      // update Revervb
-      // reverb.set(2, parseInt(controller.reverbSize));
-      // reverb.process(wave, val, 2);
+    // var gui = new dat.GUI();
+    var gui = new dat.GUI( { height: 500 } );
+    gui.closed = false;
 
+
+
+    gui.add(controller, 'filter', 1, 10000).onFinishChange(function(val){
       filter.freq(val);
-
     });
-
-    gui.add(controller, 'FilterHigh', 300, 10000).onFinishChange(function(val){
-      // update Revervb
-      // reverb.set(2, parseInt(controller.reverbSize));
-      // reverb.process(wave, val, 2);
-
-      filterhigh.freq(val);
-
-    });
-
-
-
-
-
-
-    gui.add(controller, 'ReverbTime', 1, 99).onFinishChange(function(val){
-      // update Revervb
-      // reverb.set(2, parseInt(controller.reverbSize));
-
-      reverb.set(val, 1 ,false);
-
-    });
-
-    gui.add(controller, 'ReverbDecay', 1, 99).onFinishChange(function(val){
-      // update Revervb
-      // reverb.set(2, parseInt(controller.reverbSize));
-
-      reverb.set(1, val ,false);
-
-    });
-
-
-
-
-
-
-
-
-    filterFreq = 300;
-    filterWidth = 5;
     //
-    filter = new p5.LowPass(); // création d'un filtre de type lowpass
-    // on déconnecte nos sources de la sortie principale
-    filter.freq(filterFreq);
-  // give the filter a narrow band (lower res = wider bandpass)
-    filter.res(filterWidth);
+    gui.add(controller, 'synthdelay', 1, 6000).onFinishChange(function(val){
+      delay.process(wave, 56/bpm, .7,val );
+    });
 
-    filterHighFreq = 4000;
-    // filterWidthHigh = 1;
+    gui.add(controller, 'delaytime', 1, 56/bpm).onFinishChange(function(val){
+      delay.process(wave, val, .7);
+    });
 
-    filterHighStart = new p5.HighPass();
-    filterHighStart.freq = 500;
-    filterHighStart.res = 1;
+    gui.add(controller, 'reverbTime', 1, 10).onFinishChange(function(val){
+      // update Revervb
+      // reverb.set(2, parseInt(controller.reverbSize));
+      reverb.set(val, 1 ,false);
+    });
 
+    gui.add(controller, 'reverbDecay', 1, 99).onFinishChange(function(val){
+      // update Revervb
+      // reverb.set(2, parseInt(controller.reverbSize));
+      reverb.set(1, val ,false);
+    });
 
-    filterhigh = new p5.LowPass();
-    filterhigh.freq(4000);
+    filter = new p5.LowPass();
+    filter.freq(10000);
     filter.res = 5;
 
-    // sounds[1].disconnect();
-    // sounds[2].disconnect();
-    // sounds[3].disconnect();
-    // delay = new p5.Delay();
-    //
-    // wave.disconnect();
-    // bass.disconnect();
+    sounds[1].disconnect();
+    sounds[2].disconnect();
+    sounds[3].disconnect();
+    wave.disconnect();
+    bass.disconnect();
 
-    // delay.process(wave, 56/bpm, .7, 4000);
-    // delay.disconnect();
-
-    // filter.process(sounds[1]);
-    // filter.process(sounds[2]);
-    // filter.process(sounds[3]);
-    // filter.process(wave);
-    // filter.process(bass);
-    //
-    // filterHighStart.process(sounds[1]);
-    // filterHighStart.process(sounds[2]);
-    // filterHighStart.process(sounds[3]);
-    // filterHighStart.process(wave);
-    // filterHighStart.process(bass);
-    // filterHighStart.disconnect();
-    // filterhigh.process(filterHighStart);
-
-    // eqband1 = new p5.BandPass();
-    // eqband1.freq(125);
-    // eqband1.res(5);
-    // eqband1.process(sounds[1]);
-    // eqband1.process(sounds[2]);
-    // eqband1.process(sounds[3]);
-    // eqband1.process(wave);
-    // eqband1.process(bass);
-
-
-    // reverb :
+    delay = new p5.Delay();
+    delay.process(wave, 56/bpm, .7, 1);
+    delay.disconnect();
 
     reverbTime = 1;
     reverbDecay = 100;
-    reverb = new p5.Reverb(); // création de la reverb
+    reverb = new p5.Reverb();
+
+    reverb.process(wave, reverbTime, reverbDecay);
+    reverb.process(bass, reverbTime, reverbDecay);
+    reverb.process(sounds[1], reverbTime, reverbDecay);
+    reverb.process(sounds[2], reverbTime, reverbDecay);
+    reverb.process(sounds[3], reverbTime, reverbDecay);
+    reverb.disconnect();
+
+
+    filter.process(sounds[1]);
+    filter.process(sounds[2]);
+    filter.process(sounds[3]);
+    filter.process(wave);
+    filter.process(bass);
+    filter.process(delay);
+    filter.process(reverb);
+
+    // reverb :
+
+
+
+
+     // création de la reverb
     // filter.disconnect(); // on déconnecte le filtre de la sortie principale
     // on connecte le filtre à la reverb
     reverb.process(wave, reverbTime, reverbDecay); // 3 second reverbTime, decayRate of 2%
@@ -285,25 +237,22 @@ function setup() {
     // // reverb.process(sounds[0], reverbTime, reverbDecay); //
     // reverb.process(wave, 2, 2); //
 
-
     //
-
 
     // ---------------------------------------------------
 
-
-    fft1 = new p5.FFT();
-    fft1.setInput(sounds[0]);
+    // fft1 = new p5.FFT();
+    // fft1.setInput(sounds[0]);
 
     waveshape = new p5.FFT();
     waveshape.setInput(wave);
 
-    fft2 = new p5.FFT();
-    fft2.setInput(sounds[1]);
+    // fft2 = new p5.FFT();
+    // fft2.setInput(sounds[1]);
     // fft3 = new p5.FFT();
     // fft3.setInput(sounds[2]);
-    fft4 = new p5.FFT();
-    fft4.setInput(reverb);
+    // fft4 = new p5.FFT();
+    // fft4.setInput(reverb);
 
     // Patch the input to an volume analyzer
     // synth analysis
@@ -320,15 +269,6 @@ function setup() {
 
     fftsnare = new p5.FFT();
     fftsnare.setInput(sounds[2]);
-
-
-
-    // ffthat = new p5.Amplitude();
-    // ffthat.setInput(sounds[3]);
-
-    // ffthat = new p5.FFT();
-    // ffthat.setInput(sounds[3]);
-
 
 
     // recording stuff
@@ -353,6 +293,12 @@ function setup() {
     fftrec1 = new p5.FFT();
     fftrec1.setInput(soundFile);
 
+    fftrec2 = new p5.FFT();
+    fftrec2.setInput(soundFile2);
+
+    fftrec3 = new p5.FFT();
+    fftrec3.setInput(soundFile3);
+
     createGrid();
 
     // soundFiles.push(soundFile);
@@ -376,10 +322,10 @@ function draw() {
 
   // Draw an ellipse with size based on volume
 
-  var rms = analyzer.getLevel() * 10;
-  var rmscol = analyzer.getLevel() * 1000;
-  fill(0,0,250);
-  stroke(rmscol);
+  // var rms = analyzer.getLevel() * 10;
+  // var rmscol = analyzer.getLevel() * 1000;
+  // fill(0,0,250);
+  // stroke(rmscol);
 
   // console.log(rms);
 
@@ -398,16 +344,31 @@ function draw() {
       fill(0,0,250);
       rect(random(bassSpectrum) + 800, bassSpectrum[i], random(0,bassSpectrum[i]),random(0,100));
     }
+    // visuals for recorded audio;
 
     var recSpectrum = fftrec1.analyze();
-
     for (var i = 0; i < 10 ; i++) {
-      stroke(0,0,100);
-      // fill(random(250));
-
+      stroke(0,0,250);
       fill(random(250));
       ellipse(random(recSpectrum) + 500, recSpectrum[i], random(0,recSpectrum[i]));
     }
+
+    var recSpectrum2 = fftrec2.analyze();
+    for (var i = 0; i < 20 ; i++) {
+      stroke(0,0,250);
+      fill(random(250));
+      ellipse(random(recSpectrum2) + 1200, recSpectrum2[i] + 300, random(0,recSpectrum2[i]));
+      // rotate(1);
+    };
+
+    var recSpectrum3 = fftrec3.analyze();
+    for (var i = 0; i < 20 ; i++) {
+      stroke(0,0,250);
+      fill(random(250));
+      ellipse(random(recSpectrum3) + 0, recSpectrum3[i] + 300, random(0,recSpectrum3[i]));
+      // rotate(1);
+    };
+
 
 
 
@@ -419,146 +380,53 @@ function draw() {
     noStroke();
     fill(0,0,spectrum[i]);
     ellipse(random(spectrum[i]) + velocityScale, random(500,1000), spectrum[i] * 100,spectrum[i]);
-  }
-
-
-  // kick effect filling screen
-  // for (var i = 0; i < spectrum.length / 2; i++){
-  //   noStroke();
-  //   fill(0,0,spectrum[i]);
-  //   ellipse(random(windowWidth) + velocityScale, windowHeight, spectrum[i],spectrum[i] * 100);
-  // }
-
-
-
-
-
+  };
 
   var snareSpectrum = fftsnare.analyze();
 
-  for (var i = 0; i < snareSpectrum.length; i++){
-    noStroke();
-    fill(0,0,random(250));
-    triangle(random(snareSpectrum[i]),random(snareSpectrum[i]),random(snareSpectrum[i]),random(snareSpectrum[i]),random(snareSpectrum[i]),random(snareSpectrum[i]));
-  }
+ for (var i = 0; i < snareSpectrum.length; i++){
+   noStroke();
+   fill(0,0,random(250));
+   triangle(random(snareSpectrum[i] ),random(snareSpectrum[i]),random(snareSpectrum[i]),random(snareSpectrum[i]),random(snareSpectrum[i]),random(snareSpectrum[i]));
+ }
 
-  // var hatSpectrum = ffthat.analyze();
-  //
-  //
-  // for (var i = 0; i < 10; i++){
-  //
-  //   noStroke();
-  //   fill(random(250));
-  //   triangle(hatSpectrum[i],random(50),random(hatSpectrum[i]),random(hatSpectrum[i]),random(hatSpectrum[i]),random(hatSpectrum[i]));
-  //
-  // }
-
-
-
-
-
-
-
-
-
-  // var snareSpectrum = fftsnare.analyze();
-  //
-  // for (var i = 0; i < snareSpectrum.length; i++){
-  //   // noStroke();
-  //   stroke(0,0,255);
-  //   fill(0,0,random(250));
-  //   line(random(windowWidth), windowHeight , snareSpectrum[i], snareSpectrum[i]);
-  //   // line(random(windowWidth), windowHeight , 50, snareSpectrum[i] / 2 );
-  // }
-
-
-
-
-
-
-
-
-  // console.log(wavecolor, "wavecolor");
-
-
-  // console.log(velocityScale);
-
-  // draw filtered spectrum
-
-  if( drawn.length > 1 && eq === true ){
+  if( drawn.length > 1 && fxdraw === true ){
     console.log('drawing');
     for (var i = 0; i < drawn.length; i++) {
       var draw = drawn[i]
-      fill(0,0,250);
+      fill(0,0,random(250));
       ellipse(draw.x, draw.y, random(draw.size), random(draw.size));
     }
-
   };
-
-
-
-
 
 
   if( mouseIsPressed ){
 
+      // if mouse is pressed and draw is on then push shapes to the drawn array
+      // and change fx parameters with mouse x and y
+      if (fxdraw ){
 
-
-      if (eq === false ){
-
-
-
-
-        // fill(0,0,250);
-        // ellipse(mouseX, mouseY, 40, 40);
-        // drawn.push({x: mouseX, y: mouseY, size: 40,col:"white" });
-        //
-        // for (var i = 0; i < drawn.length; i++) {
-        //   var draw = drawn[i]
-        //   fill(0,0,random(250));
-        //   ellipse(draw.x, draw.y, random(draw.size), random(draw.size));
-        // }
-
-      } else {
-
-        // console.log(eq);
-
-        // turn on filter
-        // make drawing turn black
-
-        fill(0,0,0);
-
-        // ellipse(mouseX, mouseY, 40, 40);
-        // visuals
         drawn.push({x: mouseX, y: mouseY, size: 40,col:"white" });
 
-        // for (var i = 0; i < drawn.length; i++) {
-        //   var draw = drawn[i]
-        //   fill(0,0,random(250));
-        //   ellipse(draw.x, draw.y, random(draw.size), random(draw.size));
+        var reverseMouseY = Math.abs(mouseY - 600) ;
+
+        filter.freq(reverseMouseY + 100);
+        // reverb.process(sounds[2], 5, reverseMouseY / 2);
+        // var reverbMouseY = reverseMouseY /2 ;
+        // if (reverseMouseY > 99){
+        //   reverbMouseY = 99;
         // }
-
-        // filter
-        // reverse the mouse Y pos number
-        var reverseMouse = Math.abs(mouseY - 600) ;
-        console.log("rev ",reverseMouse);
-        filter.freq(reverseMouse);
+        // reverb.process(sounds[2], 5, reverbMouseY);
 
 
 
-      // console.log(mouseY);
-      // if(mouseY > 100){
-      //   mouseY += 3000;
-      // }
+        // console.log(reverseMouseY / 2);
 
-      // console.log(mouseY, "mouse Y");
-      // console.log(mouseX, "mouse X");
+
+
+
     }
-
   }
-
-
-
 
 } // function draw
 
