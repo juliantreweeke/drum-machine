@@ -1,18 +1,10 @@
 
 // recording variables
-
 var mic, recorder, soundFile, soundFile2;
 var state = 0; // mousePress will increment from Record, to Stop, to Play
 var soundFiles = [];
-
 var fxdraw = false;
-// var filtereq = false
-
-// var reverb;
-// var reverbSize;
 var settings;
-// var rSlider;
-
 var controller = {
   filter:12000,
   synthdelay:100,
@@ -20,35 +12,21 @@ var controller = {
   reverbTime: 100,
   reverbDecay:1
 };
-
 var drawn = [];
-
 var slider;
-
-// trying to save freq of synth sound
 var notes = [];
-
 var sounds = [];
-
 var myPart; //
 var beat = 0; //
 var bpm = 90; //
-
 var filter, filterFreq, filterWidth; //
 var reverb, reverbTime, reverbDecay; //
 var settings; //
 var fft1, fft2, fft3, fft4;
-
 var counter = 0;
 var timer = 0;
-
 var gui;
-
-
-
-
 // drum stuff
-
 var kicksamples = ['audio/defaultkick.mp3','audio/dnbkick.mp3','audio/druidkick.mp3','audio/punchykick.mp3','audio/WDI22kick.mp3'];
 var kickname = ['KICK','DNB KICK','DRUID KICK','PUNCHY','WDI22 KICK'];
 
@@ -69,9 +47,7 @@ var snares = [];
 var hats = [];
 
 // html synth stuff
-
 wavetypes = ['square','triangle','sine','sawtooth'];
-
 var wave;
 wave = new p5.Oscillator();
 wave.setType(wavetypes[0]);
@@ -95,201 +71,137 @@ var bassmelody = [];
 var basskey = [55,110,123,130,146,164,174,195];
 
 // recording stuff
-
 var recs = [];
 var recs2 = [];
 var recs3 = [];
 
-
   // generate each individual sound pad from object constructors
 
-  var createGrid = function(){
-
-    for (var i = 0, j=0 ; i < 16; i++, j+= 40 ) {
-      // top left index
-    kicks.push(new HtmlSquare('120',j,i,'kick'));
-    snares.push(new HtmlSquare('160',j,i,'snare'));
-    hats.push(new HtmlSquare('200',j,i,'hat'));
-    synths.push(new HtmlSynth('280',j,i,'synth'));
-    basses.push(new HtmlBass('340',j,i,'bass'));
-    recs.push(new RecordSquare('400',j,i,'rec1',soundFile));
-    recs2.push(new RecordSquare('440',j,i,'rec2',soundFile2));
-    recs3.push(new RecordSquare('480',j,i,'rec3',soundFile3));
-    }
-
-    for (var i = 0; i < kicks.length; i++) {
-      kicks[i].display();
-      snares[i].display();
-      hats[i].display();
-      synths[i].display();
-      basses[i].display();
-      recs[i].display();
-      recs2[i].display();
-      recs3[i].display();
-    };
+var createGrid = function(){
+  for (var i = 0, j=0 ; i < 16; i++, j+= 40 ) {
+  kicks.push(new HtmlSquare('120',j,i,'kick'));
+  snares.push(new HtmlSquare('160',j,i,'snare'));
+  hats.push(new HtmlSquare('200',j,i,'hat'));
+  synths.push(new HtmlSynth('280',j,i,'synth'));
+  basses.push(new HtmlBass('340',j,i,'bass'));
+  recs.push(new RecordSquare('400',j,i,'rec1',soundFile));
+  recs2.push(new RecordSquare('440',j,i,'rec2',soundFile2));
+  recs3.push(new RecordSquare('480',j,i,'rec3',soundFile3));
   }
 
+  for (var i = 0; i < kicks.length; i++) {
+    kicks[i].display();
+    snares[i].display();
+    hats[i].display();
+    synths[i].display();
+    basses[i].display();
+    recs[i].display();
+    recs2[i].display();
+    recs3[i].display();
+  };
+}
 
 function setup() {
-
   var c = createCanvas(windowWidth, windowHeight);
   c.parent('p5Div');
-
-  slider = document.getElementById("slider");
-
-  // filter = new p5.BandPass();
-  noise = new p5.Noise();
-
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //Sequencer stuff
+  myPart = new p5.Part();
+  var pulse = new p5.Phrase('pulse', step, [1, 1, 1, 1]);
+  myPart.addPhrase(pulse);
+  myPart.setBPM(bpm);
+  myPart.start();
+  myPart.loop();
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // dat gui stuff
+  var gui = new dat.GUI( { height: 500 } );
+  gui.closed = false;
 
-    myPart = new p5.Part();
-    var pulse = new p5.Phrase('pulse', step, [1, 1, 1, 1]);
-    myPart.addPhrase(pulse);
-    myPart.setBPM(bpm);
-    myPart.start();
-    myPart.loop();
+  gui.add(controller, 'filter', 1, 10000).onFinishChange(function(val){
+    filter.freq(val);
+  });
+  //
+  gui.add(controller, 'synthdelay', 1, 6000).onFinishChange(function(val){
+    delay.process(wave, 56/bpm, .7,val );
+  });
 
+  gui.add(controller, 'delaytime', 1, 56/bpm).onFinishChange(function(val){
+    delay.process(wave, val, .7);
+  });
 
-    // my own effects
-    // cant get working
+  gui.add(controller, 'reverbTime', 1, 10).onFinishChange(function(val){
+    reverb.set(val, 1 ,false);
+  });
 
-    // ---------------------------------------------------
-    // dat gui stuff
+  gui.add(controller, 'reverbDecay', 1, 99).onFinishChange(function(val){
+    reverb.set(1, val ,false);
+  });
 
-    // var gui = new dat.GUI();
-    var gui = new dat.GUI( { height: 500 } );
-    gui.closed = false;
+  filter = new p5.LowPass();
+  filter.freq(10000);
+  filter.res = 5;
 
+  sounds[1].disconnect();
+  sounds[2].disconnect();
+  sounds[3].disconnect();
+  wave.disconnect();
+  bass.disconnect();
 
+  delay = new p5.Delay();
+  delay.process(wave, 56/bpm, .7, 1);
+  delay.disconnect();
 
-    gui.add(controller, 'filter', 1, 10000).onFinishChange(function(val){
-      filter.freq(val);
-    });
-    //
-    gui.add(controller, 'synthdelay', 1, 6000).onFinishChange(function(val){
-      delay.process(wave, 56/bpm, .7,val );
-    });
+  reverbTime = 1;
+  reverbDecay = 100;
+  reverb = new p5.Reverb();
 
-    gui.add(controller, 'delaytime', 1, 56/bpm).onFinishChange(function(val){
-      delay.process(wave, val, .7);
-    });
+  reverb.process(wave, reverbTime, reverbDecay);
+  reverb.process(bass, reverbTime, reverbDecay);
+  reverb.process(sounds[1], reverbTime, reverbDecay);
+  reverb.process(sounds[2], reverbTime, reverbDecay);
+  reverb.process(sounds[3], reverbTime, reverbDecay);
+  reverb.disconnect();
+  filter.process(sounds[1]);
+  filter.process(sounds[2]);
+  filter.process(sounds[3]);
+  filter.process(wave);
+  filter.process(bass);
+  filter.process(delay);
+  filter.process(reverb);
+  reverb.process(wave, reverbTime, reverbDecay);
+  // Set sounds to freq analysis
+  waveshape = new p5.FFT();
+  waveshape.setInput(wave);
 
-    gui.add(controller, 'reverbTime', 1, 10).onFinishChange(function(val){
-      // update Revervb
-      // reverb.set(2, parseInt(controller.reverbSize));
-      reverb.set(val, 1 ,false);
-    });
+  analyzer = new p5.Amplitude();
+  analyzer.setInput(wave);
 
-    gui.add(controller, 'reverbDecay', 1, 99).onFinishChange(function(val){
-      // update Revervb
-      // reverb.set(2, parseInt(controller.reverbSize));
-      reverb.set(1, val ,false);
-    });
+  bassanalyzer = new p5.FFT();
+  bassanalyzer.setInput(bass);
 
-    filter = new p5.LowPass();
-    filter.freq(10000);
-    filter.res = 5;
+  kickanalyzer = new p5.Amplitude();
 
-    sounds[1].disconnect();
-    sounds[2].disconnect();
-    sounds[3].disconnect();
-    wave.disconnect();
-    bass.disconnect();
+  fftkick = new p5.FFT();
+  fftkick.setInput(sounds[1]);
 
-    delay = new p5.Delay();
-    delay.process(wave, 56/bpm, .7, 1);
-    delay.disconnect();
-
-    reverbTime = 1;
-    reverbDecay = 100;
-    reverb = new p5.Reverb();
-
-    reverb.process(wave, reverbTime, reverbDecay);
-    reverb.process(bass, reverbTime, reverbDecay);
-    reverb.process(sounds[1], reverbTime, reverbDecay);
-    reverb.process(sounds[2], reverbTime, reverbDecay);
-    reverb.process(sounds[3], reverbTime, reverbDecay);
-    reverb.disconnect();
-
-
-    filter.process(sounds[1]);
-    filter.process(sounds[2]);
-    filter.process(sounds[3]);
-    filter.process(wave);
-    filter.process(bass);
-    filter.process(delay);
-    filter.process(reverb);
-
-    // reverb :
-
-
-
-
-     // création de la reverb
-    // filter.disconnect(); // on déconnecte le filtre de la sortie principale
-    // on connecte le filtre à la reverb
-    reverb.process(wave, reverbTime, reverbDecay); // 3 second reverbTime, decayRate of 2%
-    // // reverbSize = controller.reverbSize;
-    // reverbSize = 50;
-    // reverbDecay = 100;
-    // reverb = new p5.Reverb(); // création de la reverb
-    // // debugger;
-    // // reverb.process(sounds[0], reverbTime, reverbDecay); //
-    // reverb.process(wave, 2, 2); //
-
-    //
-
-    // ---------------------------------------------------
-
-    // fft1 = new p5.FFT();
-    // fft1.setInput(sounds[0]);
-
-    waveshape = new p5.FFT();
-    waveshape.setInput(wave);
-
-    // fft2 = new p5.FFT();
-    // fft2.setInput(sounds[1]);
-    // fft3 = new p5.FFT();
-    // fft3.setInput(sounds[2]);
-    // fft4 = new p5.FFT();
-    // fft4.setInput(reverb);
-
-    // Patch the input to an volume analyzer
-    // synth analysis
-    analyzer = new p5.Amplitude();
-    analyzer.setInput(wave);
-
-    bassanalyzer = new p5.FFT();
-    bassanalyzer.setInput(bass);
-
-    kickanalyzer = new p5.Amplitude();
-
-    fftkick = new p5.FFT();
-    fftkick.setInput(sounds[1]);
-
-    fftsnare = new p5.FFT();
-    fftsnare.setInput(sounds[2]);
-
-
-    // recording stuff
-
+  fftsnare = new p5.FFT();
+  fftsnare.setInput(sounds[2]);
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // MICROPHONE RECORDING STUFF
     // create an audio in
     mic = new p5.AudioIn();
-
     // users must manually enable their browser microphone for recording to work properly!
     mic.start();
-
     // create a sound recorder
     recorder = new p5.SoundRecorder();
-
     // connect the mic to the recorder
     recorder.setInput(mic);
-
     // create an empty sound file that we will use to playback the recording
     soundFile = new p5.SoundFile();
     soundFile2 =new p5.SoundFile();
     soundFile3 =new p5.SoundFile();
-
+    // set recordings to frequency analyzer
     fftrec1 = new p5.FFT();
     fftrec1.setInput(soundFile);
 
@@ -300,114 +212,71 @@ function setup() {
     fftrec3.setInput(soundFile3);
 
     createGrid();
-
-    // soundFiles.push(soundFile);
-    // soundFiles.push(soundFile2);
-
-
-
-
-
-
-
 } // setup
-
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// P5 DRAW FUNCTION
 function draw() {
-
   background(0);
-
+  // get a number from velocity of mouse, a random kinda number to use for interesting visuals
   var velocityScale = map(mouseY, 0, windowHeight, -2, 2) * 100;
-  var sizeScale = map(mouseX, 0, windowWidth, 0.1, 10 );
 
-  // Draw an ellipse with size based on volume
-
-  // var rms = analyzer.getLevel() * 10;
-  // var rmscol = analyzer.getLevel() * 1000;
-  // fill(0,0,250);
-  // stroke(rmscol);
-
-  // console.log(rms);
-
+  // visuals for synth sound
   wavecolor = waveshape.analyze();
-
   for (var i = 0; i < wavecolor.length; i++) {
     noStroke();
     fill(0,0,wavecolor[i]);
     rect(random(windowWidth), random(mouseX), random(0,wavecolor[i]) + velocityScale,random(0,100));
   }
 
-    var bassSpectrum = bassanalyzer.analyze();
+  // visuals for bass sound
+  var bassSpectrum = bassanalyzer.analyze();
 
-    for (var i = 0; i < 10 ; i++) {
-      stroke(0,0,100);
-      fill(0,0,250);
-      rect(random(bassSpectrum) + 800, bassSpectrum[i], random(0,bassSpectrum[i]),random(0,100));
-    }
-    // visuals for recorded audio;
+  for (var i = 0; i < 10 ; i++) {
+    stroke(0,0,100);
+    fill(0,0,250);
+    rect(random(bassSpectrum) + 800, bassSpectrum[i], random(0,bassSpectrum[i]),random(0,100));
+  }
 
-    // var recSpectrum = fftrec1.analyze();
-    // for (var i = 0; i < 10 ; i++) {
-    //   stroke(0,0,250);
-    //   fill(random(250));
-    //   ellipse(random(recSpectrum) + 500, recSpectrum[i] + 0, random(0,recSpectrum[i]));
-    // }
+  // visuals for recorded audio---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  var recordingSpectrum = function(x,y,name,target,loops){
 
-    // var recSpectrum2 = fftrec2.analyze();
-    // for (var i = 0; i < 20 ; i++) {
-    //   stroke(0,0,250);
-    //   fill(random(250));
-    //   ellipse(random(recSpectrum2) + 1200, recSpectrum2[i] + 300, random(0,recSpectrum2[i]));
-    //   // rotate(1);
-    // };
+    for (var i = 0; i < loops ; i++) {
+      stroke(0,0,250);
+      fill(random(250));
+      ellipse(random(name) + x, name[i] + y, random(0,name[i]));
+    };
+  }; // recordingSpectrum function
 
-    // var recSpectrum3 = fftrec3.analyze();
-    // for (var i = 0; i < 20 ; i++) {
-    //   stroke(0,0,250);
-    //   fill(random(250));
-    //   ellipse(random(recSpectrum3) + 0, recSpectrum3[i] + 300, random(0,recSpectrum3[i]));
-    //   // rotate(1);
-    // };
+  var recSpectrum = fftrec1.analyze();
+  recordingSpectrum(500,0,recSpectrum,fftrec1,10);
 
+  var recSpectrum2 = fftrec2.analyze();
+  recordingSpectrum(1200,300,recSpectrum2,fftrec2,20);
 
+  var recSpectrum3 = fftrec3.analyze();
+  recordingSpectrum(0,300,recSpectrum3,fftrec3,30);
 
-    var recordingSpectrum = function(x,y,name,target,loops){
-
-      for (var i = 0; i < loops ; i++) {
-        stroke(0,0,250);
-        fill(random(250));
-        ellipse(random(name) + x, name[i] + y, random(0,name[i]));
-      };
-    }; // recordingSpectrum function
-
-    var recSpectrum = fftrec1.analyze();
-    recordingSpectrum(500,0,recSpectrum,fftrec1,10);
-
-    var recSpectrum2 = fftrec2.analyze();
-    recordingSpectrum(1200,300,recSpectrum2,fftrec2,20);
-
-    var recSpectrum3 = fftrec3.analyze();
-    recordingSpectrum(0,300,recSpectrum3,fftrec3,30);
-
-
-
-
-
-  var spectrum = fftkick.analyze();
-
-  for (var i = 0; i < spectrum.length / 2; i++){
+  // visuals for kick
+  var kickSpectrum = fftkick.analyze();
+  for (var i = 0; i < kickSpectrum.length / 2; i++){
     noStroke();
-    fill(0,0,spectrum[i]);
-    ellipse(random(spectrum[i]) + velocityScale, random(500,1000), spectrum[i] * 100,spectrum[i]);
+    fill(0,0,kickSpectrum[i]);
+    ellipse(random(kickSpectrum[i]) + velocityScale, random(500,1000), kickSpectrum[i] * 100,kickSpectrum[i]);
   };
 
+  // visuals for snare
   var snareSpectrum = fftsnare.analyze();
-
  for (var i = 0; i < snareSpectrum.length; i++){
    noStroke();
    fill(0,0,random(250));
    triangle(random(snareSpectrum[i] ),random(snareSpectrum[i]),random(snareSpectrum[i]),random(snareSpectrum[i]),random(snareSpectrum[i]),random(snareSpectrum[i]));
  }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Drawing
 
   if( drawn.length > 1 && fxdraw === true ){
     console.log('drawing');
@@ -418,40 +287,19 @@ function draw() {
     }
   };
 
-
   if( mouseIsPressed ){
-
       // if mouse is pressed and draw is on then push shapes to the drawn array
       // and change fx parameters with mouse x and y
       if (fxdraw ){
-
         drawn.push({x: mouseX, y: mouseY, size: 40,col:"white" });
-
         var reverseMouseY = Math.abs(mouseY - 600) ;
-
         filter.freq(reverseMouseY + 100);
-        // reverb.process(sounds[2], 5, reverseMouseY / 2);
-        // var reverbMouseY = reverseMouseY /2 ;
-        // if (reverseMouseY > 99){
-        //   reverbMouseY = 99;
-        // }
-        // reverb.process(sounds[2], 5, reverbMouseY);
-
-
-
-        // console.log(reverseMouseY / 2);
-
-
-
-
     }
   }
-
-} // function draw
-
-
-
-
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Step function - goes through 16 steps - from p5.sound library
 
 function step() {
   if (beat > 8){
@@ -523,11 +371,9 @@ function step() {
       });
     }
   }
-
   recChecker(recs,'#rec1',soundFile);
   recChecker(recs2,'#rec2',soundFile2);
   recChecker(recs3,'#rec3',soundFile3);
-
   beat += 1;
   beat = beat % 16;
 }

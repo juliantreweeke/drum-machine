@@ -1,5 +1,3 @@
-
-
 $(document).ready(function(){
 
   var kickcounter = 0;
@@ -82,9 +80,8 @@ $(document).ready(function(){
   var octaveDown = function(array){
     return array = array.map(function (n) { return n / 2; });
   };
-
-  // Clear all function and event handlers;
-
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Clear all sounds and event handlers;
   var clearAll = function(array){
     return array = array.map(function (n) { n.active = false });
   };
@@ -127,12 +124,6 @@ $(document).ready(function(){
 
 ////////////////////////////
 
-  // $('.eqbutton').click(function(){
-  //     fxdraw = true;
-  //   $('#main').toggleClass( "noopacity");
-  //
-  // });
-
   var playing = true;
   $('.playbutton').click(function(){
     $( this ).toggleClass('pauseimg');
@@ -145,7 +136,6 @@ $(document).ready(function(){
       playing = true;
     }
   });
-
 
   $('.eqbutton').click(function(){
     $('#main').toggleClass( "noopacity");
@@ -163,24 +153,19 @@ $(document).ready(function(){
     }
   });
 
-
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // MIC RECORDING JQUERY STUFF
 
   var recordsound = function(filename,node){
-
-
     if (state === 0 && mic.enabled) {
       masterVolume(0);
 
       var recordCountDown = setInterval(function(){ myTimer() }, 1000);
       var countdown = 1;
-
       function myTimer() {
         if(countdown === 4 ){
-
           $(node).text("GO!");
-
         }
-
         else if(countdown === 5 ){
           $(node).text('RECORDING').addClass('red');
           recorder.record(filename);
@@ -193,26 +178,18 @@ $(document).ready(function(){
         countdown++;
       } // function myTimer
     }
-
     else if (state === 1) {
       recorder.stop();
       $(node).text('PLAY');
       state++;
     }
-
     else if (state === 2) {
-
       masterVolume(1);
       filename.play();
       state = 0;
       $(node).text('REC');
-
-
     }
-
   };
-
-
     $('.recordbutton').click(function(){
       recordsound(soundFile,'.recordbutton')
     });
@@ -224,19 +201,4 @@ $(document).ready(function(){
     $('.recordbutton3').click(function(){
       recordsound(soundFile3,'.recordbutton3')
     });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 });
