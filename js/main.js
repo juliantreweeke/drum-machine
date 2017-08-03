@@ -5,18 +5,21 @@ var state = 0; // mousePress will increment from Record, to Stop, to Play
 var soundFiles = [];
 var fxdraw = false;
 var settings;
+var beatJump = -1;
 var controller = {
   filter:12000,
   synthdelay:100,
   delaytime:100,
   reverbTime: 100,
-  reverbDecay:1
+  reverbDecay:1,
+  grid: [1, 0, 1, 1, 0, 1, 0]
 };
 var drawn = [];
 var slider;
 var notes = [];
 var sounds = [];
 var myPart; //
+var pulse;
 var beat = 0; //
 var bpm = 90; //
 var filter, filterFreq, filterWidth; //
@@ -107,15 +110,15 @@ function setup() {
   //////////////////////////////////////////////////////////////////////////////////////////////
   //Sequencer stuff
   myPart = new p5.Part();
-  var pulse = new p5.Phrase('pulse', step, [1, 1, 1, 1]);
+  pulse = new p5.Phrase('pulse', step, [1, 1, 1, 1]);
   myPart.addPhrase(pulse);
   myPart.setBPM(bpm);
   myPart.start();
   myPart.loop();
   //////////////////////////////////////////////////////////////////////////////////////////////
   // dat gui stuff
-  var gui = new dat.GUI( { height: 500 } );
-  gui.closed = false;
+  var gui = new dat.GUI( { autoPlace: true } );
+  gui.domElement.id = 'gui';
 
   gui.add(controller, 'filter', 1, 10000).onFinishChange(function(val){
     filter.freq(val);
@@ -136,6 +139,8 @@ function setup() {
   gui.add(controller, 'reverbDecay', 1, 99).onFinishChange(function(val){
     reverb.set(1, val ,false);
   });
+
+  gui.remember(controller);
 
   filter = new p5.LowPass();
   filter.freq(10000);
@@ -290,7 +295,7 @@ function draw() {
 // Drawing
 
   if( drawn.length > 1 && fxdraw === true ){
-    console.log('drawing');
+
     for (var i = 0; i < drawn.length; i++) {
       var draw = drawn[i]
       fill(0,0,random(250));
@@ -385,6 +390,22 @@ function step() {
   recChecker(recs,'#rec1',soundFile);
   recChecker(recs2,'#rec2',soundFile2);
   recChecker(recs3,'#rec3',soundFile3);
-  beat += 1;
-  beat = beat % 16;
-}
+
+  //
+  if( beatJump >= 0 ){
+    console.log('%cBEATJUMP', 'color:red', beatJump);
+    if( kicks[beat].active ){
+      $('div#kick' + beat).css('border', '1px solid white');
+    } else {
+      $('div#kick' + beat).css('border', '2px solid blue');
+    }
+    beat = beatJump;
+    beatJump = -1;
+    // border: 'white solid 2px'
+
+  } else {
+    beat += 1;
+    beat = beat % 16;
+  }
+
+};

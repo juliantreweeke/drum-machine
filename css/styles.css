@@ -1,3 +1,5 @@
+/*#gui { position: absolute; top: 200px; right: 400px }*/
+
 .red {
   color:red;
 }
@@ -8,7 +10,6 @@
   flex-direction: column;
   min-height: 100vh;
   text-align: center;
-
 }
 
   .header{
@@ -97,6 +98,7 @@
 body {
 margin: 0;
 overflow: hidden;
+background-color: black;
 }
 
 
@@ -138,7 +140,6 @@ background-color: blue;
 #main {
 z-index:3;
 flex: 1 0 auto;
-
 /*display:contents;*/
 position:relative;
 top:48%;

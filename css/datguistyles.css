@@ -7,6 +7,7 @@
        text-overflow: ellipsis;
        text-shadow: 5px 5px 0 rgba(1, 19, 144, 1) ;
         font-size: 15px;
+        z-index:4;
 
 }
 .dg .c .slider {
@@ -75,16 +76,9 @@
        border-right: 1px solid silver
 }
 .dg li.title, .dg closed {
-       /*background: -moz-linear-gradient(center top, #ededed 34%, #dfdfdf 71%);*/
-       /*background: -ms-linear-gradient(top, #ededed 34%, #dfdfdf 71%);*/
-       /*background: -webkit-gradient(linear, left top, left bottom, color-stop(34%, #ededed),*/
-                    color-stop(71%, #dfdfdf));
-       /*background-color: #ededed;*/
        border: 1px solid rgb(0, 156, 255);
        border-radius: 2px;
-       box-shadow: inset 1px 0 9px 0 white;
        color: black;
-       text-shadow: 1px 0 0 white
 }
 .dg li.title:hover {
        outline-color: rgb(0, 156, 255);
@@ -93,21 +87,18 @@
 }
 .dg.main .close-button {
        /*background: -moz-linear-gradient(center top, #ededed 34%, #dfdfdf 71%);*/
-       background: -ms-linear-gradient(top, #ededed 34%, #dfdfdf 71%);
-       background: -webkit-gradient(linear, left top, left bottom, color-stop(34%, #ededed),
-                    color-stop(71%, #dfdfdf));
-       background-color: #ededed;
-       border: 1px solid #dcdcdc;
+       background: black;
        border-radius: 2px;
        box-shadow: inset 1px 0 9px 0 white;
-       color: black;
+       color: rgb(0, 156, 255);
        height: 27px;
        line-height: 27px;
        text-align: center;
-       text-shadow: 1px 0 0 white
 }
 .dg.main .close-button:hover {
        outline-color: rgb(0, 156, 255);
        outline-style: solid;
        outline-width: 1.5px
 }
+
+.dg { z-index:5 !important};

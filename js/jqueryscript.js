@@ -5,6 +5,28 @@ $(document).ready(function(){
   var hatcounter = 0;
   var synthcounter = 0;
   var basscounter = 0;
+  var playing = true;
+
+  $(document).on('keypress', function (e) {
+
+    console.log(`key: "${ e.key }" (${ e.keyCode })`);
+
+    if( e.key === ' '){
+        $( '.playbutton' ).toggleClass('pauseimg');
+        if (playing){
+          myPart.stop();
+          playing = false;
+        } else {
+          myPart.start();
+          playing = true;
+        }
+    } else if( !isNaN(e.key) ){
+      console.log('Number', e.key);
+      beatJump = parseInt(e.key);
+    }
+
+  });
+
 
   $('.kicktoggle').click(function(){
       kickcounter++;
@@ -124,7 +146,6 @@ $(document).ready(function(){
 
 ////////////////////////////
 
-  var playing = true;
   $('.playbutton').click(function(){
     $( this ).toggleClass('pauseimg');
     if (playing){
@@ -141,13 +162,13 @@ $(document).ready(function(){
     $('#main').toggleClass( "noopacity");
 
     if (fxdraw === false){
-      console.log('false');
+
       // turn on eq draw
       fxdraw = true;
       alert(fxdraw);
     } else {
       // turn off eq draw
-      console.log('true');
+
       fxdraw = false;
       filter.freq(12000);
     }
