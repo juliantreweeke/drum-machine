@@ -4,7 +4,6 @@ var $square;
 function HtmlBass(top,left,i,name) {
   var self = this;
   this.counter = 0;
-  this.col = 'rgb(250,250,250)';
   this.id = i;
   this.name = name + i.toString();
   this.active = false;

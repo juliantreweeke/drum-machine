@@ -19,18 +19,14 @@ function RecordSquare(top,left,i,name,filename) {
       $square.attr('id', self.name);
       $('#kicktable').append($square);
       $square.click(function(){ self.clicked() });
-
     });
   }
 
 
   self.clicked = function() {
 
-
     if (filename.buffer === null){
-
       return;
-
     }
 
     if (self.active){
@@ -44,7 +40,6 @@ function RecordSquare(top,left,i,name,filename) {
     } else {
 
       self.active = true;
-
       // $('#' + self.name ).addClass("on");
 
       $('#' + self.name ).css({

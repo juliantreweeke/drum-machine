@@ -120,9 +120,14 @@ $(document).ready(function(){
   };
 
   $('.clearbutton').click(function(){
-
-    clearAll = clearAll(kicks);
-
+    clearAll(kicks);
+    clearAll(snares);
+    clearAll(hats);
+    clearAll(synths);
+    clearAll(basses);
+    clearAll(recs);
+    clearAll(recs2);
+    clearAll(recs3);
   });
 
 
@@ -169,12 +174,6 @@ $(document).ready(function(){
   });
 
 
-
-  // $('recordbutton').click(function(){
-  //
-  //
-  //
-  // })
 
   var recordsound = function(filename,node){
     debugger;
@@ -239,52 +238,6 @@ $(document).ready(function(){
 
 
 
-
-
-
-  $('.recordbuttonbackup').click(function(){
-    // use the '.enabled' boolean to make sure user enabled the mic (otherwise we'd record silence)
-  if (state === 0 && mic.enabled) {
-    masterVolume(0);
-
-    var recordCountDown = setInterval(function(){ myTimer() }, 1000);
-    var countdown = 1;
-
-    function myTimer() {
-      if(countdown === 4 ){
-
-        $('.recordbutton').text("GO!");
-
-      }
-
-      else if(countdown === 5 ){
-        $('.recordbutton').text('RECORDING').addClass('red');
-        recorder.record(soundFile);
-        state++;
-        clearInterval(recordCountDown);
-      }
-      else {
-        $('.recordbutton').text(countdown);
-      }
-      countdown++;
-    } // function myTimer
-  }
-
-  else if (state === 1) {
-    recorder.stop();
-    $(this).text('PLAY');
-    state++;
-  }
-
-  else if (state === 2) {
-
-    masterVolume(1);
-    soundFile.play();
-    state = 0;
-    $(this).text('REC');
-  }
-
-  });
 
 
 

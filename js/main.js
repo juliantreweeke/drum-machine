@@ -420,10 +420,8 @@ function draw() {
 
     for (var i = 0; i < 10 ; i++) {
       stroke(0,0,100);
-      // fill(random(250));
-
       fill(0,0,250);
-      rect(random(bassSpectrum) + 800, bassSpectrum[i] - sizeScale, random(0,bassSpectrum[i]) + velocityScale,random(0,100));
+      rect(random(bassSpectrum) + 800, bassSpectrum[i], random(0,bassSpectrum[i]),random(0,100));
     }
 
     var recSpectrum = fftrec1.analyze();
@@ -433,7 +431,7 @@ function draw() {
       // fill(random(250));
 
       fill(random(250));
-      ellipse(random(recSpectrum) + 100, recSpectrum[i] + sizeScale, random(0,recSpectrum[i]) + velocityScale);
+      ellipse(random(recSpectrum) + 500, recSpectrum[i], random(0,recSpectrum[i]));
     }
 
 
@@ -441,16 +439,11 @@ function draw() {
 
 
   var spectrum = fftkick.analyze();
-  // console.log(spectrum);
 
-  // fill(0,255,0); // spectrum is green
   for (var i = 0; i < spectrum.length / 2; i++){
     noStroke();
     fill(0,0,spectrum[i]);
     ellipse(random(spectrum[i]) + velocityScale, random(500,1000), spectrum[i] * 100,spectrum[i]);
-    // var x = map(i, 0, spectrum.length, 0, width);
-    // var h = -height + map(spectrum[i], 0, 255, height, 0);
-    // rect(x, height, width / spectrum.length, h )
   }
 
 
@@ -472,8 +465,6 @@ function draw() {
     noStroke();
     fill(0,0,random(250));
     triangle(random(snareSpectrum[i]),random(snareSpectrum[i]),random(snareSpectrum[i]),random(snareSpectrum[i]),random(snareSpectrum[i]),random(snareSpectrum[i]));
-    // ellipse(random(windowWidth), windowHeight , snareSpectrum[i], snareSpectrum[i],snareSpectrum[i]);
-    // line(random(windowWidth), windowHeight , 50, snareSpectrum[i] / 2 );
   }
 
   // var hatSpectrum = ffthat.analyze();
@@ -605,7 +596,6 @@ function step() {
     drawn.pop();
   };
 
-
   var previousKick = $('#' + 'kick' + (beat - 1) );
   if (beat === 0){
     previousKick = $('#' + 'kick' + 15 );
@@ -614,121 +604,68 @@ function step() {
   border: 'blue solid 2px'
   });
 
-  // $('#' + 'kick' + beat ).css({
+  if (synths[beat].active === true) {
+      wave.amp(0.2);
+      wave.freq(synthmelody[beat]);
+  } else {
+      wave.amp(0);
+      $('#' + 'synth' + beat ).css({
+      backgroundColor: 'black'
+      });
+  }
 
-  // });
-  //
-  //
-  //
-  // var previousBeat = beat - 1;
-  // if (beat === 0){
-  //   previousBeat = 16;
-  // }
-  //
-  // // console.log( beat - 1 + "previous beat",beat, "beat now"  );
-  //
-  //
-  // if ( kicks[0].active === true ) {
-  //   previousKick.css({
-  //   backgroundColor: 'blue'
-  //   });
-  // } else {
-  //   previousKick.css({
-  //   backgroundColor: 'black'
-  //   });
-  // }
-  //
+  if (basses[beat].active === true) {
+      bass.amp(0.6);
+      bass.freq(bassmelody[beat]);
+  } else {
+      bass.amp(0);
+      $('#' + 'bass' + beat ).css({
+      backgroundColor: 'black'
+      });
+  }
 
+  if (kicks[beat].active === true) {
+      sounds[1].play(0)
+      $('#' + 'kick' + beat ).effect( "bounce", { times: 3 }, "slow" );
+  } else {
+    $('#' + 'kick' + beat ).css({
+    border: 'white solid 2px'
+    });
+  }
 
+  if (snares[beat].active === true) {
+      sounds[2].play(0)
+      $('#' + 'snare' + beat ).effect( "shake" );
+  } else {
+    $('#' + 'snare' + beat ).css({
+    border:'blue 2px solid'
+    });
+  }
 
+  if (hats[beat].active === true) {
+      sounds[3].play(0)
+      $('#' + 'hat' + beat ).effect( "bounce", { times: 6 }, "fast" );
+  } else {
+    $('#' + 'hat' + beat ).css({
+    border:'blue 2px solid'
+    });
+  }
 
-
-
-  // if ( $('#' + 'kick' + (beat - 1).attr('active').val() === 'true' ) ){
-  //   backgroundColor: 'blue'
-  // }
-
-
-
-
-  // debugger;
-
-    if (synths[beat].active === true) {
-        wave.amp(0.1);
-        wave.freq(synthmelody[beat]);
+  var recChecker = function(array,id,filename){
+    if (array[beat].active === true) {
+        filename.play();
+      $(id + beat).effect( "bounce", { times: 3 }, "slow" );
+    } else {
+      $(id + beat).css({
+      border:'blue 2px solid'
+      });
     }
+  }
 
-    if (synths[beat].active === false) {
-        wave.amp(0);
+  recChecker(recs,'#rec1',soundFile);
+  recChecker(recs2,'#rec2',soundFile2);
+  recChecker(recs3,'#rec3',soundFile3);
 
-    };
-
-    if (basses[beat].active === true) {
-
-        bass.amp(0.6);
-        bass.freq(bassmelody[beat]);
-    }
-
-    if (basses[beat].active === false) {
-        // wave.amp(0);
-        bass.amp(0);
-    }
-
-    if (kicks[beat].active === true) {
-        sounds[1].play(0)
-        // $('#' + 'kick' + beat )
-
-        $('#' + 'kick' + beat ).effect( "bounce", { times: 3 }, "slow" ).css({
-        border:'lightblue 3px solid'
-        });
-
-    }
-
-    if (kicks[beat].active === false) {
-
-        $('#' + 'kick' + beat ).css({
-        border: 'white solid 2px'
-        });
-
-    }
-
-
-
-
-
-    if (snares[beat].active === true) {
-
-        sounds[2].play(0)
-        $('#' + 'snare' + beat ).effect( "shake" );
-
-    }
-
-    if (hats[beat].active === true) {
-        sounds[3].play(0)
-        $('#' + 'hat' + beat ).effect( "bounce", { times: 6 }, "fast" );
-    }
-
-    if (recs[beat].active === true) {
-        soundFile.play();
-        // $('#' + 'hat' + beat ).effect( "bounce", { times: 6 }, "fast" );
-    }
-
-    if (recs2[beat].active === true) {
-        soundFile2.play();
-        // $('#' + 'hat' + beat ).effect( "bounce", { times: 6 }, "fast" );
-    }
-
-    if (recs3[beat].active === true) {
-        soundFile3.play();
-        // $('#' + 'hat' + beat ).effect( "bounce", { times: 6 }, "fast" );
-    }
-
-
-
-
-
-
-
-    beat += 1;
-    beat = beat % 16;
+  beat += 1;
+  beat = beat % 16;
 }

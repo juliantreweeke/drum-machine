@@ -4,7 +4,6 @@ var $square;
 function HtmlSynth(top,left,i,name) {
   var self = this;
   this.counter = 0;
-  this.col = 'rgb(250,250,250)';
   this.id = i;
   this.name = name + i.toString();
   this.active = false;
@@ -38,13 +37,10 @@ function HtmlSynth(top,left,i,name) {
       self.active = true;
       self.counter++;
       synthmelody[self.id] = synthskey[self.counter];
-      // this.counter = this.counter % synths.length;
       $('#' + self.name ).css({
       backgroundColor: bluecolors[this.counter]
       });
 
     }
-
   }
-
 }

@@ -178,6 +178,12 @@ color:white;
   border-radius: 5px;
 }
 
+.padborder {
+border:'blue 2px solid';
+}
+
+
+
 .synthpad {
   border-collapse: collapse;
   box-sizing: border-box;
