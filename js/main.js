@@ -11,8 +11,7 @@ var controller = {
   synthdelay:100,
   delaytime:100,
   reverbTime: 100,
-  reverbDecay:1,
-  grid: [1, 0, 1, 1, 0, 1, 0]
+  reverbDecay:1
 };
 var drawn = [];
 var slider;
@@ -140,7 +139,7 @@ function setup() {
     reverb.set(1, val ,false);
   });
 
-  gui.remember(controller);
+  // gui.remember(controller);
 
   filter = new p5.LowPass();
   filter.freq(10000);
