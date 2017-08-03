@@ -201,4 +201,23 @@ $(document).ready(function(){
     $('.recordbutton3').click(function(){
       recordsound(soundFile3,'.recordbutton3')
     });
+
+    var recordAll = function(){
+
+    }
+
+    var recording = false;
+    $('.masterbutton').click(function(){
+      if (recording === false){
+        if (mic.enabled){
+          recorder2.record(masterFile);
+          recording = true;
+        }
+      } else {
+        recorder2.stop();
+        saveSound(masterFile,'boxsonic_export.wav');
+        recording = false;
+      }
+    });
+
 });

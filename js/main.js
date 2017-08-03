@@ -104,7 +104,7 @@ var createGrid = function(){
 function setup() {
   var c = createCanvas(windowWidth, windowHeight);
   c.parent('p5Div');
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////////////
   //Sequencer stuff
   myPart = new p5.Part();
   var pulse = new p5.Phrase('pulse', step, [1, 1, 1, 1]);
@@ -112,7 +112,7 @@ function setup() {
   myPart.setBPM(bpm);
   myPart.start();
   myPart.loop();
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////////////
   // dat gui stuff
   var gui = new dat.GUI( { height: 500 } );
   gui.closed = false;
@@ -125,7 +125,7 @@ function setup() {
     delay.process(wave, 56/bpm, .7,val );
   });
 
-  gui.add(controller, 'delaytime', 1, 56/bpm).onFinishChange(function(val){
+  gui.add(controller, 'delaytime', 0, 56/bpm).onFinishChange(function(val){
     delay.process(wave, val, .7);
   });
 
@@ -201,6 +201,7 @@ function setup() {
     soundFile = new p5.SoundFile();
     soundFile2 =new p5.SoundFile();
     soundFile3 =new p5.SoundFile();
+    masterFile =new p5.SoundFile();
     // set recordings to frequency analyzer
     fftrec1 = new p5.FFT();
     fftrec1.setInput(soundFile);
@@ -211,7 +212,17 @@ function setup() {
     fftrec3 = new p5.FFT();
     fftrec3.setInput(soundFile3);
 
+    recorder2 = new p5.SoundRecorder();
+    // connect the mic to the recorder
+    recorder2.setInput(filter);
+
     createGrid();
+
+
+
+
+
+
 } // setup
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
