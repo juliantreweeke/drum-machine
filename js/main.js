@@ -78,7 +78,6 @@ var recs2 = [];
 var recs3 = [];
 
   // generate each individual sound pad from object constructors
-
 var createGrid = function(){
   for (var i = 0, j=0 ; i < 16; i++, j+= 40 ) {
   kicks.push(new HtmlSquare('120',j,i,'kick'));

@@ -187,13 +187,10 @@ $(document).ready(function(){
     $('#main').toggleClass( "noopacity");
 
     if (fxdraw === false){
-
-      // turn on eq draw
+      // turn on filter draw
       fxdraw = true;
-      alert(fxdraw);
     } else {
-      // turn off eq draw
-
+      // turn off filter draw
       fxdraw = false;
       filter.freq(12000);
     }
@@ -252,7 +249,7 @@ $(document).ready(function(){
       recordsound(soundFile3,'.recordbutton3')
     });
 
-
+    // experimental record all feature - it comes out distorted.....
 
     var recording = false;
     $('.masterbutton').click(function(){

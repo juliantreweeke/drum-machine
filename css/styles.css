@@ -330,13 +330,15 @@ left:-120px;
   top:25px;
   left:40px;
   border: none;
-  background-image: url('/images/pause.png');
+  /*background-image: url('/images/pause.png');*/
+  background-image: url('http://i.imgur.com/9fWIuCF.png');
   background-size: 30px;
   background-repeat: no-repeat;
 }
 
 .pauseimg {
-  background-image: url('/images/play.png');
+  /*background-image: url('/images/play.png');*/
+  background-image: url('http://i.imgur.com/nGiVW37.png');
 }
 
 .eqbutton {
