@@ -346,29 +346,48 @@ function draw() {
     }
     // visuals for recorded audio;
 
+    // var recSpectrum = fftrec1.analyze();
+    // for (var i = 0; i < 10 ; i++) {
+    //   stroke(0,0,250);
+    //   fill(random(250));
+    //   ellipse(random(recSpectrum) + 500, recSpectrum[i] + 0, random(0,recSpectrum[i]));
+    // }
+
+    // var recSpectrum2 = fftrec2.analyze();
+    // for (var i = 0; i < 20 ; i++) {
+    //   stroke(0,0,250);
+    //   fill(random(250));
+    //   ellipse(random(recSpectrum2) + 1200, recSpectrum2[i] + 300, random(0,recSpectrum2[i]));
+    //   // rotate(1);
+    // };
+
+    // var recSpectrum3 = fftrec3.analyze();
+    // for (var i = 0; i < 20 ; i++) {
+    //   stroke(0,0,250);
+    //   fill(random(250));
+    //   ellipse(random(recSpectrum3) + 0, recSpectrum3[i] + 300, random(0,recSpectrum3[i]));
+    //   // rotate(1);
+    // };
+
+
+
+    var recordingSpectrum = function(x,y,name,target,loops){
+
+      for (var i = 0; i < loops ; i++) {
+        stroke(0,0,250);
+        fill(random(250));
+        ellipse(random(name) + x, name[i] + y, random(0,name[i]));
+      };
+    }; // recordingSpectrum function
+
     var recSpectrum = fftrec1.analyze();
-    for (var i = 0; i < 10 ; i++) {
-      stroke(0,0,250);
-      fill(random(250));
-      ellipse(random(recSpectrum) + 500, recSpectrum[i], random(0,recSpectrum[i]));
-    }
+    recordingSpectrum(500,0,recSpectrum,fftrec1,10);
 
     var recSpectrum2 = fftrec2.analyze();
-    for (var i = 0; i < 20 ; i++) {
-      stroke(0,0,250);
-      fill(random(250));
-      ellipse(random(recSpectrum2) + 1200, recSpectrum2[i] + 300, random(0,recSpectrum2[i]));
-      // rotate(1);
-    };
+    recordingSpectrum(1200,300,recSpectrum2,fftrec2,20);
 
     var recSpectrum3 = fftrec3.analyze();
-    for (var i = 0; i < 20 ; i++) {
-      stroke(0,0,250);
-      fill(random(250));
-      ellipse(random(recSpectrum3) + 0, recSpectrum3[i] + 300, random(0,recSpectrum3[i]));
-      // rotate(1);
-    };
-
+    recordingSpectrum(0,300,recSpectrum3,fftrec3,30);
 
 
 
