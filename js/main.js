@@ -5,8 +5,6 @@ var mic, recorder, soundFile, soundFile2;
 var state = 0; // mousePress will increment from Record, to Stop, to Play
 var soundFiles = [];
 
-
-
 var eq = false;
 // var filtereq = false
 
@@ -133,29 +131,6 @@ var recs3 = [];
   }
 
 
-
-
-
-
-
-  // var gui = createGui('Label');
-  // gui.addGlobals('reverbDecay');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function setup() {
 
   var c = createCanvas(windowWidth, windowHeight);
@@ -183,6 +158,7 @@ function setup() {
     myPart.setBPM(bpm);
     myPart.start();
     myPart.loop();
+
 
     // my own effects
     // cant get working

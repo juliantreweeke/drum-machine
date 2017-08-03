@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
-<script src="js/three.js" charset="utf-8"></script>
+<!-- <script src="js/three.js" charset="utf-8"></script> -->
 
-<script src="js/orbitControls.js" charset="utf-8"></script>
+<!-- <script src="js/orbitControls.js" charset="utf-8"></script> -->
 <script src="js/p5.js" charset="utf-8"></script>
 <script src="js/p5.dom.js" charset="utf-8"></script>
 <script src="js/p5.sound.js" charset="utf-8"></script>
@@ -17,19 +17,19 @@
 <script src="js/jquery-ui.js" charset="utf-8"></script>
 <script src="js/htmlsquares.js" charset="utf-8"></script>
 <script src="js/recordsquares.js" charset="utf-8"></script>
+<script src="js/htmlsynthsquares.js" charset="utf-8"></script>
+<script src="js/htmlbasssquares.js" charset="utf-8"></script>
 <!-- <script src="js/basssquares.js" charset="utf-8"></script> -->
 <!-- <script src="js/squares.js" charset="utf-8"></script> -->
 <!-- <script src="js/synthsquares.js" charset="utf-8"></script> -->
 
-<script src="js/htmlsynthsquares.js" charset="utf-8"></script>
-<script src="js/htmlbasssquares.js" charset="utf-8"></script>
 
-<script src="js/Projector.js" charset="utf-8"></script>
+<!-- <script src="js/Projector.js" charset="utf-8"></script> -->
 <script src="js/datGui.js" charset="utf-8"></script>
-<script src="js/quicksettings.js" charset="utf-8"></script>
+<!-- <script src="js/quicksettings.js" charset="utf-8"></script> -->
 <!-- <script src="js/p5.gui.js" charset="utf-8"></script> -->
 <script src="js/main.js" charset="utf-8"></script>
-<script src="js/threejsmain.js" charset="utf-8"></script>
+<!-- <script src="js/threejsmain.js" charset="utf-8"></script> -->
 
 <link rel="stylesheet" href="css/styles.css">
 
@@ -40,17 +40,14 @@
  <body>
 <div class="container">
    <header class="header"><h1 class="retrotext">DRM MCH</h1></header>
-   <button class="samplebuttons retrotext fadebutton">FADE</button>
-   <button class="samplebuttons retrotext eqbutton">EQ DRAW</button>
+   <button class="samplebuttons playbutton"></button>
+   <button class="samplebuttons retrotext eqbutton">DRAW</button>
    <button class="samplebuttons retrotext clearbutton">CLEAR</button>
 <div class="holygrail-body">
 
 
 
     <div id="main">
-
-      <!-- <h1 class="retrotext">KICK</h1>
-      <h1 class="retrotext">SNARE</h1> -->
 
       <table id="kicktable" >
 
@@ -66,47 +63,27 @@
       <button class="samplebuttons recordbutton retrotext">REC</button>
       <button class="samplebuttons recordbutton2 retrotext">REC</button>
       <button class="samplebuttons recordbutton3 retrotext">REC</button>
-      <button class="samplebuttons fx fxkick retrotext">FX</button>
       <button class="samplebuttons octave retrotext">+</button>
       <button class="samplebuttons octave2 retrotext">-</button>
       <button class="samplebuttons bassoctave retrotext">+</button>
       <button class="samplebuttons bassoctave2 retrotext">-</button>
-
-
-
-
-
-
+      <button class="samplebuttons clearkick clearbuttons retrotext">x</button>
+      <button class="samplebuttons clearsnare clearbuttons retrotext">x</button>
+      <button class="samplebuttons clearhat clearbuttons retrotext">x</button>
+      <button class="samplebuttons clearsynth clearbuttons retrotext">x</button>
+      <button class="samplebuttons clearbass clearbuttons retrotext">x</button>
+      <button class="samplebuttons clearrec clearbuttons retrotext">x</button>
+      <button class="samplebuttons clearrec2 clearbuttons retrotext">x</button>
+      <button class="samplebuttons clearrec3 clearbuttons retrotext">x</button>
 
     </div>
-
-
 
     <div id='p5Div'>
 
     </div>
     <div id='output'></div>
 
-
-
-
-
-
-  <!-- <ul class="nav">
-  </ul>
-  <div class="aside">Aside</div>
-</div> -->
-<!-- <footer class="footer">WHAT UP </footer> -->
 <div/>
-
-
-
-
-
-
-
-  <script src="js/starsystem.js" charset="utf-8"></script>
-
 
  </body>
 </html>

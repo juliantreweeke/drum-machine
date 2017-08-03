@@ -10,32 +10,15 @@ $(document).ready(function(){
 
   $('.kicktoggle').click(function(){
       kickcounter++;
-      kickcounter = kickcounter % kicksamples.length;
-      sounds[1] = loadSound(kicksamples[kickcounter]);
+      drumToggle(kickcounter,kicksamples,1,kickname,this);
       fftkick.setInput(sounds[1]);
-      $(this).text(kickname[kickcounter]);
   })
-
-  // $('.snaretoggle').click(function(){
-  //     snarecounter++;
-  //     snarecounter = snarecounter % snaresamples.length;
-  //     sounds[2] = loadSound(snaresamples[snarecounter]);
-  //     fftsnare.setInput(sounds[2]);
-  //     $(this).text(snarename[snarecounter]);
-  // })
 
   $('.snaretoggle').click(function(){
       snarecounter++;
       drumToggle(snarecounter,snaresamples,2,snarename,this);
       fftsnare.setInput(sounds[2]);
   })
-
-  // $('.hattoggle').click(function(){
-  //     hatcounter++;
-  //     hatcounter = hatcounter % hatsamples.length;
-  //     sounds[3] = loadSound(hatsamples[hatcounter]);
-  //     $(this).text(hatname[hatcounter]);
-  // })
 
   var drumToggle = function(counter,array,num,name,target){
     counter = counter % array.length;
@@ -47,13 +30,6 @@ $(document).ready(function(){
     hatcounter++
     drumToggle(hatcounter,hatsamples,3,hatname,this);
   });
-
-
-
-
-
-
-
 
   $('.synthtoggle').click(function(){
       synthcounter++;
@@ -82,22 +58,6 @@ $(document).ready(function(){
       $('.tempo').text(bpm.toString());
   })
 
-  var fxkickcounter = 0;
-  $('.fxkick').click(function(){
-    // reverb.process(sounds[1], 10, 10);
-
-      if (fxkickcounter === 1){
-        // reverb.process(sounds[1], 0, 0);
-        reverb.disconnect;
-      } else {
-        fxkickcounter++;
-        reverb.connect(sounds[1]);
-        reverb.process(sounds[1], slider.value, 10); //
-        fxkickcounter = 0;
-
-      }
-  })
-
   // double the values in the synthskey array to change octaves
   $('.octave').click(function(){
       synthmelody = octaveUp(synthmelody);
@@ -123,26 +83,10 @@ $(document).ready(function(){
     return array = array.map(function (n) { return n / 2; });
   };
 
-
-  var clear = function(){
-
-
-    kicks = [];
-    snares = [];
-    hats = [];
-    synths = [];
-    basses = [];
-    recs = [];
-    recs2 = [];
-    beat = 0;
-    createGrid();
-
-  };
+  // Clear all function and event handlers;
 
   var clearAll = function(array){
-
     return array = array.map(function (n) { n.active = false });
-
   };
 
   $('.clearbutton').click(function(){
@@ -156,48 +100,64 @@ $(document).ready(function(){
     clearAll(recs3);
   });
 
+  $('.clearkick').click(function(){
+    clearAll(kicks);
+  })
+  $('.clearsnare').click(function(){
+    clearAll(snares);
+  })
+  $('.clearhat').click(function(){
+    clearAll(hats);
+  })
+  $('.clearsynth').click(function(){
+    clearAll(synths);
+  })
+  $('.clearbass').click(function(){
+    clearAll(basses);
+  })
+  $('.clearrec').click(function(){
+    clearAll(recs);
+  })
+  $('.clearrec2').click(function(){
+    clearAll(recs2);
+  })
+  $('.clearrec3').click(function(){
+    clearAll(recs3);
+  })
 
-
-
-
-
-
-
-
-
-
-  $('.fadebutton').click(function(){
-    $('#main').toggleClass( "noopacity");
-  });
-
-
+////////////////////////////
 
   $('.eqbutton').click(function(){
 
-
     $('#main').toggleClass( "noopacity");
 
-    if (eq === false){
-      // turn on eq draw
-      eq = true;
-
-
-
-
-
-    } else {
-      // turn off eq draw
-      eq = false;
-      filter.freq(4000);
-
-
-
-
-
-    }
-
-
   });
+
+  var playing = true;
+  $('.playbutton').click(function(){
+    $( this ).toggleClass('pauseimg');
+    if (playing){
+      myPart.stop();
+      playing = false;
+      // $(this).css('background-image', "url('/images/play.png')";
+    } else {
+      myPart.start();
+      playing = true;
+    }
+  });
+
+
+  // $('.eqbutton').click(function(){
+  //   $('#main').toggleClass( "noopacity");
+  //   if (eq === false){
+  //     // turn on eq draw
+  //     eq = true;
+  //   } else {
+  //     // turn off eq draw
+  //     eq = false;
+  //     filter.freq(4000);
+  //   }
+  // });
 
 
 

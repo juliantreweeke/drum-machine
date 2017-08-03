@@ -233,39 +233,39 @@ table, tr, td {
   box-sizing: border-box;
 }
 
-.kicktoggle, .fxkick {
+.kicktoggle, .clearkick {
 top:120px;
 }
 
-.snaretoggle {
+.snaretoggle, .clearsnare {
 top:160px;
 }
 
-.hattoggle {
+.hattoggle, .clearhat {
 top:200px;
 }
 
-.synthtoggle,.octave, .octave2 {
+.synthtoggle,.octave, .octave2,.clearsynth {
 top:280px;
 /*background-image: url(../images/sine.png);*/
 }
 
-.basstoggle, .bassoctave, .bassoctave2 {
+.basstoggle, .bassoctave, .bassoctave2,.clearbass {
 top:340px;
 }
 
-.recordbutton,.recordbutton2,.recordbutton3 {
+.recordbutton,.recordbutton2,.recordbutton3, {
 left:230px;
 }
-.recordbutton {
+.recordbutton, .clearrec {
 top:400px;
 }
 
-.recordbutton2 {
+.recordbutton2, .clearrec2 {
 top:440px;
 }
 
-.recordbutton3 {
+.recordbutton3, .clearrec3 {
 top:480px;
 }
 
@@ -317,28 +317,33 @@ left:-120px;
   z-index: 3;
 }
 
-.fx {
+.clearbuttons {
   width:40px;
   left:640px;
 }
 
 .octave,.bassoctave {
-  left:640px;
-  width:40px;
-}
-
-.octave2,.bassoctave2 {
   left:680px;
   width:40px;
 }
 
+.octave2,.bassoctave2 {
+  left:720px;
+  width:40px;
+}
 
-
-
-.fadebutton {
-  top:20px;
-  left:10px;
+.playbutton {
+  width:40px;
+  top:25px;
+  left:40px;
   border: none;
+  background-image: url('/images/pause.png');
+  background-size: 30px;
+  background-repeat: no-repeat;
+}
+
+.pauseimg {
+  background-image: url('/images/play.png');
 }
 
 .eqbutton {
