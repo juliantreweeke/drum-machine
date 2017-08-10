@@ -38,7 +38,9 @@ This is something I have to fix and seek out another plugin to do this option.
 
 ### Libraries.
 
-I used P5 for all the visuals and P5.sound for all the audio.
+I used P5.js for all the visuals and P5.sound for all the audio.
+
+Live link: [P5 Libraries](https://p5js.org/libraries/)
 
 ### Bugs.
 
