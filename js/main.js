@@ -108,7 +108,7 @@ function setup() {
   //////////////////////////////////////////////////////////////////////////////////////////////
   //Sequencer stuff
   myPart = new p5.Part();
-  pulse = new p5.Phrase('pulse', step, [1, 1, 1, 1]);
+  pulse = new p5.Phrase('pulse', step, [1]);
   myPart.addPhrase(pulse);
   myPart.setBPM(bpm);
   myPart.start();
@@ -315,10 +315,12 @@ function draw() {
 // Step function - goes through 16 steps - from p5.sound library
 
 function step() {
+  // get rid of drawing elements from page gradually
   if (beat > 8){
     drawn.pop();
   };
 
+  // get the last beat to change back to blue
   var previousKick = $('#' + 'kick' + (beat - 1) );
   if (beat === 0){
     previousKick = $('#' + 'kick' + 15 );
@@ -327,6 +329,7 @@ function step() {
   border: 'blue solid 2px'
   });
 
+  // check if object is active to play sound or do css
   if (synths[beat].active === true) {
       wave.amp(0.2);
       wave.freq(synthmelody[beat]);
@@ -390,7 +393,6 @@ function step() {
 
   //
   if( beatJump >= 0 ){
-    console.log('%cBEATJUMP', 'color:red', beatJump);
     if( kicks[beat].active ){
       $('div#kick' + beat).css('border', '1px solid white');
     } else {

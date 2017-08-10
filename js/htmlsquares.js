@@ -3,7 +3,6 @@ var $square;
 
 function HtmlSquare(top,left,i,name) {
   var self = this;
-  this.col = 'rgb(250,250,250)';
   this.name = name + i.toString();
   this.active = false;
   this.display = function() {

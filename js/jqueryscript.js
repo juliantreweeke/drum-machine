@@ -96,13 +96,6 @@ $(document).ready(function(){
     $('.tempo').text(bpm.toString());
   }
 
-
-
-
-
-
-
-
   // double the values in the synthskey array to change octaves
   $('.octave').click(function(){
       synthmelody = octaveUp(synthmelody);
