@@ -359,6 +359,29 @@ left:-120px;
   border: none;
 }
 
+.loginbutton {
+  top:20px;
+  left:380px;
+  border: none;
+}
+
+#userlog {
+  background-color: black;
+  color:white;
+  width:300px;
+  height:200px;
+  z-index: 100px;
+  display: none;
+  
+}
+
+.show {
+  display:block !important;
+}
+
+.hide {
+  display:none !important;
+}
 
 
 
@@ -368,6 +391,8 @@ left:-120px;
 
 #p5Div {
 position: absolute;
-
-
 }
+
+
+
+

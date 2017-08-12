@@ -6,7 +6,16 @@ $(document).ready(function(){
   var synthcounter = 0;
   var basscounter = 0;
   var playing = true;
-
+  
+  ////////////////////////////////////////////////////////////////////////////////
+  // LOG IN BUTTON
+  
+  $('.loginbutton').click(function(){
+    $( '#userlog' ).toggleClass('show');
+  });
+  
+  
+  
   ////////////////////////////////////////////////////////////////////////////////
   // KEYBOARD EVENT HANDLERS
   $(document).on('keydown', function (e) {
