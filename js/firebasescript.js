@@ -31,17 +31,18 @@ $(document).ready(function(){
   // (nested object nodes are accessed like 'grid/childKey/anotherKey')
   firebase.database().ref('grid').once('value').then(function(snapshot) {
     var val = snapshot.val();
-    // debugger;
+    debugger;
   });
   
   // set node value:
   // Arrays are potentially handled a bit weirdly in Firebase, beware!
   database.ref('grid').set([
-    [true, true, false, true],
-    [false, true, false, true],
-    [false, true, false, true],
-    [false, false, false, false]
+    [false,false,false,false,false, false, false, false,false, false, false, false,false, false,false, false],[false,false,false,false,false, false, false, false,false, false, false, false,false, false,false, false]
   ]);
+  
+  // console.log(database.ref('grid'));
+  
+  
   
   
   
