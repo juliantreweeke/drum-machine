@@ -139,11 +139,49 @@ function setup() {
     reverb.set(1, val ,false);
   });
 
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // MICROPHONE RECORDING STUFF
+    // create an audio in
+    mic = new p5.AudioIn();
+    // users must manually enable their browser microphone for recording to work properly!
+    mic.start();
+    // create a sound recorder
+    recorder = new p5.SoundRecorder();
+    // connect the mic to the recorder
+    recorder.setInput(mic);
+    // create an empty sound file that we will use to playback the recording
+    soundFile = new p5.SoundFile();
+    soundFile2 =new p5.SoundFile();
+    soundFile3 =new p5.SoundFile();
+
+    // experimental master recording function
+    // masterFile =new p5.SoundFile();
+
+    // set recordings to frequency analyzer
+    fftrec1 = new p5.FFT();
+    fftrec1.setInput(soundFile);
+
+    fftrec2 = new p5.FFT();
+    fftrec2.setInput(soundFile2);
+
+    fftrec3 = new p5.FFT();
+    fftrec3.setInput(soundFile3);
+
+    // experimental master recording function
+    // recorder2 = new p5.SoundRecorder();
+    // connect the mic to the recorder
+    // recorder2.setInput(filter);
+
   // gui.remember(controller);
 
   filter = new p5.LowPass();
   filter.freq(10000);
   filter.res = 5;
+
+  soundFile.disconnect();
+  soundFile2.disconnect();
+  soundFile3.disconnect();
 
   sounds[1].disconnect();
   sounds[2].disconnect();
@@ -164,7 +202,13 @@ function setup() {
   reverb.process(sounds[1], reverbTime, reverbDecay);
   reverb.process(sounds[2], reverbTime, reverbDecay);
   reverb.process(sounds[3], reverbTime, reverbDecay);
+  reverb.process(soundFile);
+  reverb.process(soundFile2);
+  reverb.process(soundFile3);
   reverb.disconnect();
+  filter.process(soundFile);
+  filter.process(soundFile2);
+  filter.process(soundFile3);
   filter.process(sounds[1]);
   filter.process(sounds[2]);
   filter.process(sounds[3]);
@@ -190,35 +234,7 @@ function setup() {
 
   fftsnare = new p5.FFT();
   fftsnare.setInput(sounds[2]);
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  // MICROPHONE RECORDING STUFF
-    // create an audio in
-    mic = new p5.AudioIn();
-    // users must manually enable their browser microphone for recording to work properly!
-    mic.start();
-    // create a sound recorder
-    recorder = new p5.SoundRecorder();
-    // connect the mic to the recorder
-    recorder.setInput(mic);
-    // create an empty sound file that we will use to playback the recording
-    soundFile = new p5.SoundFile();
-    soundFile2 =new p5.SoundFile();
-    soundFile3 =new p5.SoundFile();
-    masterFile =new p5.SoundFile();
-    // set recordings to frequency analyzer
-    fftrec1 = new p5.FFT();
-    fftrec1.setInput(soundFile);
 
-    fftrec2 = new p5.FFT();
-    fftrec2.setInput(soundFile2);
-
-    fftrec3 = new p5.FFT();
-    fftrec3.setInput(soundFile3);
-
-    recorder2 = new p5.SoundRecorder();
-    // connect the mic to the recorder
-    recorder2.setInput(filter);
 
     createGrid();
 
