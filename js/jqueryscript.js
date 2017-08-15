@@ -6,16 +6,16 @@ $(document).ready(function(){
   var synthcounter = 0;
   var basscounter = 0;
   var playing = true;
-  
+
   ////////////////////////////////////////////////////////////////////////////////
   // LOG IN BUTTON
-  
+
   $('.loginbutton').click(function(){
     $( '#userlog' ).toggleClass('show');
   });
-  
-  
-  
+
+
+
   ////////////////////////////////////////////////////////////////////////////////
   // KEYBOARD EVENT HANDLERS
   $(document).on('keydown', function (e) {
@@ -204,14 +204,16 @@ $(document).ready(function(){
   var recordsound = function(filename,node){
     if (state === 0 && mic.enabled) {
       masterVolume(0);
-
+      $(node).attr('disabled','disabled');
       var recordCountDown = setInterval(function(){ myTimer() }, 1000);
       var countdown = 1;
       function myTimer() {
         if(countdown === 4 ){
+
           $(node).text("GO!");
         }
         else if(countdown === 5 ){
+          $(node).removeAttr('disabled');
           $(node).text('RECORDING');
           $(node).css('color','red');
           recorder.record(filename);
